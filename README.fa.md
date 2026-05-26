@@ -453,8 +453,16 @@ MiroTalk یک پروژه متن‌باز WebRTC برای تماس ویدیویی
 
 ---
 
-## License
+## مجوز / License
 
-این پروژه بر پایه MiroTalk ساخته شده است. قبل از استفاده، تغییر یا انتشار مجدد، license پروژه اصلی MiroTalk و فایل‌های license موجود در repo را بررسی کنید.
+این پروژه یک fork/customized deployment stack بر پایه MiroTalk است. پروژه اصلی MiroTalk تحت مجوز **GNU Affero General Public License v3.0 (AGPL-3.0)** منتشر شده است.
 
-</div>
+از آن‌جایی که این پروژه بر پایه نرم‌افزار AGPL ساخته شده، تعهدات همین license ممکن است برای این fork و نسخه‌های تغییر‌یافته‌ای که منتشر می‌شوند یا به‌صورت سرویس شبکه‌ای ارائه می‌شوند نیز اعمال شود.
+
+لطفاً موارد زیر را بررسی کنید:
+
+- فایل `LICENSE` موجود در پروژه
+- repository اصلی MiroTalk
+- متن کامل AGPL-3.0
+
+پروژه اصلی: [MiroTalk](https://github.com/miroslavpejic85/mirotalk)
