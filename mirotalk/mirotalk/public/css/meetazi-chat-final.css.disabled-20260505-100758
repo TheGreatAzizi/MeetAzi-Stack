@@ -1,0 +1,289 @@
+﻿/* Meetazi exact chat final fix
+   Based on real DOM:
+   #msgerChat > #msg-0.msg.right-msg > .msg-bubble
+*/
+
+#msgerDraggable,
+#msger,
+.msger-draggable,
+.msger {
+  font-family: Vazirmatn, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+
+/* Main chat messages area */
+#msgerChat.msger-chat {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+
+  padding: 22px 22px 28px !important;
+  scroll-behavior: smooth !important;
+}
+
+/* Every message row */
+#msgerChat .msg {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: none !important;
+
+  display: flex !important;
+  align-items: flex-end !important;
+  gap: 10px !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  flex: 0 0 auto !important;
+  clear: both !important;
+  z-index: 3 !important;
+}
+
+/* My messages */
+#msgerChat .msg.right-msg {
+  flex-direction: row-reverse !important;
+  justify-content: flex-start !important;
+}
+
+/* Other messages */
+#msgerChat .msg.left-msg {
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+}
+
+/* Avatar */
+#msgerChat .msg-img {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+  max-width: 38px !important;
+  max-height: 38px !important;
+
+  flex: 0 0 38px !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+/* Bubble */
+#msgerChat .msg-bubble {
+  position: relative !important;
+  display: block !important;
+
+  width: auto !important;
+  min-width: 180px !important;
+  max-width: min(560px, 72%) !important;
+
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+
+  margin: 0 !important;
+  padding: 13px 14px 12px !important;
+
+  overflow: visible !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+
+  border-radius: 18px !important;
+}
+
+/* Bubble direction and alignment */
+#msgerChat .right-msg .msg-bubble {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  border-bottom-left-radius: 7px !important;
+}
+
+#msgerChat .left-msg .msg-bubble {
+  margin-right: 0 !important;
+  margin-left: auto !important;
+  border-bottom-right-radius: 7px !important;
+}
+
+/* Info row */
+#msgerChat .msg-info {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+
+  width: 100% !important;
+  margin: 0 0 8px !important;
+  padding: 0 !important;
+
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+}
+
+#msgerChat .msg-info-name {
+  font-weight: 800 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+#msgerChat .msg-info-time {
+  direction: ltr !important;
+  white-space: nowrap !important;
+  opacity: 0.72 !important;
+  font-size: 11px !important;
+}
+
+/* Message text */
+#msgerChat .msg-text {
+  display: block !important;
+
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+
+  line-height: 1.85 !important;
+  font-size: 14px !important;
+}
+
+/* Divider inside message */
+#msgerChat .msg-bubble hr {
+  display: block !important;
+  width: 100% !important;
+  height: 1px !important;
+  margin: 12px 0 10px !important;
+  border: 0 !important;
+  opacity: 0.22 !important;
+}
+
+/* Action buttons area */
+#msgerChat .msg-bubble .msg-actions,
+#msgerChat .msg-bubble [class*="action" i],
+#msgerChat .msg-bubble [class*="buttons" i] {
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  flex-wrap: wrap !important;
+  margin-top: 8px !important;
+}
+
+/* Action buttons */
+#msgerChat .msg-bubble button,
+#msgerChat .msg-bubble i,
+#msgerChat .msg-bubble a {
+  position: relative !important;
+  transform: none !important;
+}
+
+#msgerChat .msg-bubble button {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  max-width: 28px !important;
+  max-height: 28px !important;
+  padding: 0 !important;
+  border-radius: 9px !important;
+}
+
+/* Hide empty state when messages exist */
+#msgerChat:has(.msg) ~ *,
+.msger-main:has(#msgerChat .msg) .empty,
+.msger-main:has(#msgerChat .msg) [class*="empty" i],
+.msger-main:has(#msgerChat .msg) [class*="start" i][class*="conversation" i] {
+  display: none !important;
+}
+
+/* Input area */
+#msgerInputArea,
+.msger-inputarea {
+  display: flex !important;
+  align-items: flex-end !important;
+  gap: 10px !important;
+  padding: 12px 18px !important;
+}
+
+#msgerInput,
+.msger-input {
+  min-height: 46px !important;
+  max-height: 130px !important;
+  line-height: 1.8 !important;
+  resize: none !important;
+  border-radius: 14px !important;
+  padding: 12px 14px !important;
+}
+
+#msgerSendBtn,
+.msger-send-btn {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  border-radius: 15px !important;
+}
+
+/* Mobile */
+@media (max-width: 760px) {
+  #msgerChat.msger-chat {
+    padding: 16px 12px 22px !important;
+    gap: 10px !important;
+  }
+
+  #msgerChat .msg-bubble {
+    max-width: 82% !important;
+    min-width: 140px !important;
+    padding: 11px 12px !important;
+    border-radius: 16px !important;
+  }
+
+  #msgerChat .msg-img {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+    max-width: 34px !important;
+    max-height: 34px !important;
+    flex-basis: 34px !important;
+  }
+
+  #msgerInputArea,
+  .msger-inputarea {
+    padding: 10px 12px !important;
+    gap: 8px !important;
+  }
+
+  #msgerInput,
+  .msger-input {
+    min-height: 42px !important;
+    font-size: 13.5px !important;
+  }
+
+  #msgerSendBtn,
+  .msger-send-btn {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
+}

@@ -1,0 +1,41 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>meetazi</title>
+
+        <!-- Replace p2p.meetazi.com with YOUR-DOMAIN-NAME -->
+        <script src="https://p2p.meetazi.com/js/iframe.js" defer></script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const domain = 'p2p.meetazi.com'; // YOUR-DOMAIN-NAME
+                const options = {
+                    room: 'test',
+                    name: 'meetazi',
+                    avatar: 'https://p2p.meetazi.com/images/meetazi-logo.png',
+                    audio: 0,
+                    video: 0,
+                    screen: 0,
+                    hide: 0,
+                    notify: 0,
+                    duration: 'unlimited', // HH:MM:SS
+                    token: null,
+                    width: '100vw',
+                    height: '100vh',
+                    parentNode: document.querySelector('#meet'),
+                }; // https://docs.meetazi.com/meetazi-p2p/join-room/
+                const api = new IframeApi(domain, options);
+            });
+        </script>
+      <link rel="stylesheet" href="../css/meetazi-brand.css" />
+</head>
+    <body>
+        <div id="meet"></div>
+    </body>
+</html>
+
+
+
+

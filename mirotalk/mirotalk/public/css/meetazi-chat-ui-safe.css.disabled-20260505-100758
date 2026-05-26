@@ -1,0 +1,117 @@
+﻿/* Meetazi chat UI safe fix
+   This file does NOT touch .msg / .left-msg / .right-msg / message positioning.
+   It only improves the shell, header, input and scrollbars.
+*/
+
+#chatRoom,
+.chatRoom,
+#msger,
+.msger,
+#msgerDraggable,
+.msgerDraggable {
+  font-family: Vazirmatn, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+
+#msgerDraggable,
+.msgerDraggable {
+  border-radius: 18px !important;
+  overflow: hidden !important;
+}
+
+#msger,
+.msger {
+  border-radius: 18px !important;
+  overflow: hidden !important;
+}
+
+.msger-header,
+#msgerHeader,
+.chat-header,
+#chatHeader {
+  min-height: 56px !important;
+  padding: 12px 16px !important;
+}
+
+.msger-chat,
+#msgerChat,
+.chat-messages,
+#chatMessages {
+  padding: 18px 16px !important;
+  overflow-y: auto !important;
+  scrollbar-width: thin !important;
+}
+
+/* فقط متن داخل پیام، بدون تغییر چیدمان خود پیام */
+.msg-text,
+.message-text {
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  line-height: 1.8 !important;
+}
+
+.msg-bubble {
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+/* Input area */
+.msger-inputarea,
+#msgerInputArea,
+.chat-input-area,
+#chatInputArea {
+  gap: 10px !important;
+  padding: 12px !important;
+}
+
+.msger-input,
+#msgerInput,
+.chat-input,
+#chatInput,
+textarea[id*="chat" i],
+input[id*="chat" i] {
+  min-height: 44px !important;
+  max-height: 130px !important;
+  border-radius: 14px !important;
+  padding: 11px 14px !important;
+  font-family: inherit !important;
+  line-height: 1.7 !important;
+  resize: none !important;
+}
+
+.msger-send-btn,
+#msgerSendBtn,
+.chat-send-btn,
+#chatSendBtn,
+button[id*="send" i][id*="chat" i] {
+  border-radius: 14px !important;
+  min-width: 44px !important;
+  height: 44px !important;
+}
+
+/* Mobile */
+@media (max-width: 760px) {
+  #msgerDraggable,
+  .msgerDraggable,
+  #msger,
+  .msger {
+    width: calc(100vw - 18px) !important;
+    max-width: calc(100vw - 18px) !important;
+    max-height: calc(100vh - 92px) !important;
+  }
+
+  .msger-chat,
+  #msgerChat,
+  .chat-messages,
+  #chatMessages {
+    padding: 14px 10px !important;
+  }
+
+  .msger-inputarea,
+  #msgerInputArea,
+  .chat-input-area,
+  #chatInputArea {
+    padding: 10px !important;
+    gap: 8px !important;
+  }
+}

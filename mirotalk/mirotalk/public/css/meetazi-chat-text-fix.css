@@ -1,0 +1,80 @@
+﻿/* Meetazi chat text-only fix
+   فقط متن پیام و placeholder را اصلاح می‌کند.
+   به موقعیت پیام‌ها و layout اصلی دست نمی‌زند.
+*/
+
+#msgerChat .msg-bubble {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+#msgerChat .msg-info {
+  position: relative !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin-bottom: 10px !important;
+  z-index: 2 !important;
+}
+
+#msgerChat .msg-text {
+  position: relative !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+
+  width: 100% !important;
+  height: auto !important;
+  min-height: 22px !important;
+  max-height: none !important;
+
+  margin: 8px 0 12px !important;
+  padding: 0 !important;
+
+  color: inherit !important;
+  font-size: 14px !important;
+  line-height: 1.85 !important;
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  overflow: visible !important;
+
+  z-index: 3 !important;
+}
+
+/* اگر متن داخل div/p/span داخلی رندر شده باشد */
+#msgerChat .msg-text *,
+#msgerChat .msg-bubble p,
+#msgerChat .msg-bubble span {
+  max-width: 100% !important;
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+/* خط جداکننده و دکمه‌های پایین پیام */
+#msgerChat .msg-bubble hr {
+  position: relative !important;
+  display: block !important;
+  margin: 10px 0 !important;
+  z-index: 1 !important;
+}
+
+/* placeholder وسط صفحه وقتی پیام وجود دارد پنهان شود */
+#msgerChat:has(.msg) .msger-chat-empty,
+#msgerChat:has(.msg) .empty-chat,
+#msgerChat:has(.msg) .empty-state,
+#msgerChat:has(.msg) [class*="empty" i],
+#msgerChat:has(.msg) [class*="start" i][class*="conversation" i] {
+  display: none !important;
+}
+
+/* اگر placeholder خواهر/بیرون msgerChat باشد */
+.msger-main:has(#msgerChat .msg) .msger-empty,
+.msger-main:has(#msgerChat .msg) .empty-chat,
+.msger-main:has(#msgerChat .msg) .empty-state,
+.msger-main:has(#msgerChat .msg) [class*="empty" i],
+.msger-main:has(#msgerChat .msg) [class*="start" i][class*="conversation" i] {
+  display: none !important;
+}

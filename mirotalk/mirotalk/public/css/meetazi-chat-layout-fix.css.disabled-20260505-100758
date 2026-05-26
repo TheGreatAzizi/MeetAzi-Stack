@@ -1,0 +1,215 @@
+﻿/* Meetazi chat layout fix
+   هدف: پیام‌ها عمودی و پشت‌سرهم نمایش داده شوند.
+   به JS و ارسال پیام دست نمی‌زند.
+*/
+
+/* ظرف اصلی پیام‌ها */
+#msgerChat,
+.msger-chat,
+#chatMessages,
+.chat-messages,
+#chatMessagesList,
+.chat-messages-list,
+[id*="message" i][class*="list" i],
+[class*="message" i][class*="list" i],
+[id*="messages" i],
+[class*="messages" i] {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* خاموش کردن placeholder وسط صفحه وقتی پیام‌ها می‌آیند */
+#msgerChat [class*="empty" i],
+.msger-chat [class*="empty" i],
+#chatMessages [class*="empty" i],
+.chat-messages [class*="empty" i],
+[class*="start" i][class*="conversation" i],
+[id*="empty" i],
+[class*="empty-state" i] {
+  pointer-events: none !important;
+}
+
+/* اگر placeholder وسط صفحه روی پیام‌ها افتاده، پنهانش کن */
+#msgerChat:has(.msg) [class*="empty" i],
+.msger-chat:has(.msg) [class*="empty" i],
+#chatMessages:has(.msg) [class*="empty" i],
+.chat-messages:has(.msg) [class*="empty" i],
+#msgerChat:has(.message) [class*="empty" i],
+.msger-chat:has(.message) [class*="empty" i],
+#chatMessages:has(.message) [class*="empty" i],
+.chat-messages:has(.message) [class*="empty" i] {
+  display: none !important;
+}
+
+/* خود آیتم پیام‌ها */
+.msg,
+.message,
+.chat-message,
+.message-item,
+.message-card,
+[class*="message-card" i],
+[class*="chat-message" i] {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: none !important;
+
+  display: block !important;
+  width: fit-content !important;
+  min-width: 160px !important;
+  max-width: min(560px, 78%) !important;
+
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+
+  margin: 8px 16px !important;
+  padding: 0 !important;
+
+  clear: both !important;
+  z-index: 2 !important;
+}
+
+/* پیام‌های خود کاربر سمت راست */
+.right-msg,
+.msg.right-msg,
+.message.right-msg,
+[class*="right-msg" i],
+[class*="own" i][class*="message" i],
+[class*="mine" i][class*="message" i],
+[class*="outgoing" i] {
+  align-self: flex-end !important;
+  margin-right: 16px !important;
+  margin-left: auto !important;
+}
+
+/* پیام‌های دیگران سمت چپ */
+.left-msg,
+.msg.left-msg,
+.message.left-msg,
+[class*="left-msg" i],
+[class*="incoming" i] {
+  align-self: flex-start !important;
+  margin-left: 16px !important;
+  margin-right: auto !important;
+}
+
+/* باکس حباب پیام */
+.msg-bubble,
+.message-bubble,
+.chat-message-bubble,
+[class*="bubble" i],
+[class*="message-content" i] {
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  max-width: 100% !important;
+
+  padding: 12px 14px !important;
+  border-radius: 18px !important;
+
+  overflow: visible !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  white-space: normal !important;
+}
+
+/* متن پیام */
+.msg-text,
+.message-text,
+.chat-message-text,
+[class*="message-text" i] {
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  line-height: 1.75 !important;
+}
+
+/* جلوگیری از کارت‌های خیلی بلند و خالی */
+.msg > *,
+.message > *,
+.chat-message > *,
+.message-card > * {
+  max-height: none !important;
+}
+
+/* خط جداکننده داخل کارت، اگر باعث ارتفاع زیاد شده */
+.msg hr,
+.message hr,
+.chat-message hr,
+.message-card hr {
+  margin: 10px 0 !important;
+}
+
+/* دکمه‌های اکشن داخل پیام جمع‌وجور */
+.msg button,
+.message button,
+.chat-message button,
+.message-card button {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  border-radius: 9px !important;
+}
+
+/* ناحیه input پایین */
+.msger-inputarea,
+#msgerInputArea,
+.chat-input-area,
+#chatInputArea {
+  display: flex !important;
+  align-items: flex-end !important;
+  gap: 10px !important;
+  padding: 12px !important;
+}
+
+.msger-input,
+#msgerInput,
+.chat-input,
+#chatInput,
+textarea[id*="chat" i],
+input[id*="chat" i] {
+  min-height: 44px !important;
+  max-height: 120px !important;
+  border-radius: 14px !important;
+  line-height: 1.7 !important;
+  resize: none !important;
+}
+
+/* موبایل */
+@media (max-width: 760px) {
+  .msg,
+  .message,
+  .chat-message,
+  .message-item,
+  .message-card,
+  [class*="message-card" i],
+  [class*="chat-message" i] {
+    max-width: 86% !important;
+    margin: 7px 10px !important;
+  }
+
+  .msg-bubble,
+  .message-bubble,
+  .chat-message-bubble,
+  [class*="bubble" i],
+  [class*="message-content" i] {
+    padding: 10px 12px !important;
+    border-radius: 16px !important;
+  }
+}

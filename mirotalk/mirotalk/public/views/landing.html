@@ -1,0 +1,365 @@
+﻿<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>meetazi | جلسه آنلاین</title>
+  <meta name="description" content="با meetazi جلسه آنلاین بسازید، لینک را برای دیگران بفرستید و مستقیم داخل مرورگر وارد تماس شوید." />
+  <meta name="theme-color" content="#17130f" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="meetazi" />
+  <meta property="og:title" content="meetazi | جلسه آنلاین" />
+  <meta property="og:description" content="جلسه آنلاین ساده، سریع و بدون نصب برنامه." />
+  <meta property="og:image" content="/images/logo.svg" />
+  <meta property="og:url" content="/" />
+
+  <link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+  <link rel="shortcut icon" type="image/svg+xml" href="../images/favicon.svg" />
+  <link rel="apple-touch-icon" href="../images/logo.svg" />
+  <link rel="stylesheet" href="../css/meetazi.css" />
+</head>
+
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="wrap">
+        <nav class="nav">
+          <a class="brand" href="/" aria-label="meetazi">
+            <img class="brand-mark" src="../images/logo.svg" alt="meetazi logo" />
+            <span class="brand-text">meet<span>azi</span></span>
+          </a>
+
+          <div class="nav-actions">
+            <a class="nav-link" href="#start">شروع جلسه</a>
+            <a class="nav-link" href="#features">امکانات</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="wrap">
+        <section class="hero">
+          <div class="copy">
+            <div class="kicker">جلسه آنلاین، مستقیم در مرورگر</div>
+
+            <h1 class="title">یک لینک <span class="soft">کافی‌ست.</span></h1>
+
+            <p class="subtitle">
+              با meetazi نام اتاق را انتخاب کنید، لینک جلسه را بسازید و برای دیگران بفرستید.
+              بدون نصب برنامه، سریع و ساده وارد تماس شوید.
+            </p>
+
+            <div class="points">
+              <span class="point">بدون نصب برنامه</span>
+              <span class="point">ورود با لینک</span>
+              <span class="point">اتاق با نام دلخواه</span>
+            </div>
+          </div>
+
+          <section id="start" class="panel" aria-label="ساخت جلسه">
+            <div class="panel-top">
+              <div>
+                <h2 class="panel-title">شروع جلسه</h2>
+                <p class="panel-desc">نام اتاق را بنویسید یا یک اتاق تصادفی بسازید.</p>
+              </div>
+              <span class="status">online</span>
+            </div>
+
+            <div class="panel-body">
+              <label class="field">
+                <span class="label-row">
+                  <span class="label">نام اتاق</span>
+                  <span class="hint">English only</span>
+                </span>
+
+                <input
+                  id="room"
+                  class="input"
+                  type="text"
+                  placeholder="team-meeting"
+                  maxlength="40"
+                  autocomplete="off"
+                  spellcheck="false"
+                  oninput="updatePreview()"
+                />
+              </label>
+
+              <div class="preview" aria-live="polite">
+                <span id="previewBase" class="preview-base">meetazi.ir/join?room=</span>
+                <span id="previewRoom" class="preview-room">team-meeting</span>
+              </div>
+
+              <div class="actions">
+                <button class="btn btn-primary" onclick="joinRoom()">ورود به جلسه</button>
+                <button class="btn btn-secondary" onclick="randomizeRoom()">اتاق تصادفی</button>
+              </div>
+
+              <div class="copy-row">
+                <button class="btn btn-copy" onclick="copyRoomLink()">کپی لینک جلسه</button>
+              </div>
+
+              <div id="feedback" class="feedback">لینک جلسه کپی شد</div>
+
+              <p class="panel-note">
+                اگر نام اتاق را خالی بگذارید، یک نام تصادفی ساخته می‌شود. برای ورود سریع می‌توانید Enter بزنید.
+              </p>
+            </div>
+          </section>
+        </section>
+
+        <section id="features" class="features features-meet">
+  <div class="features-head features-head-meet">
+    <div class="section-kicker">امکانات جلسه</div>
+    <h2 class="features-title">قابلیت‌هایی که داخل جلسه در اختیار دارید.</h2>
+  </div>
+
+  <div class="features-grid features-grid-meet">
+    <article class="feature-card">
+      <div class="feature-number">01</div>
+      <h3>تماس تصویری</h3>
+      <p>ورود به جلسه با وبکم و نمایش تصویر شرکت‌کنندگان داخل اتاق.</p>
+      <span class="feature-meta">Camera</span>
+    </article>
+
+    <article class="feature-card">
+      <div class="feature-number">02</div>
+      <h3>تماس صوتی</h3>
+      <p>روشن و خاموش کردن میکروفون و مدیریت صدای خود در طول جلسه.</p>
+      <span class="feature-meta">Microphone</span>
+    </article>
+
+    <article class="feature-card">
+      <div class="feature-number">03</div>
+      <h3>اشتراک صفحه</h3>
+      <p>نمایش صفحه، پنجره یا تب مرورگر برای ارائه، آموزش و پشتیبانی.</p>
+      <span class="feature-meta">Screen share</span>
+    </article>
+
+    <article class="feature-card">
+      <div class="feature-number">04</div>
+      <h3>چت گروهی</h3>
+      <p>ارسال پیام داخل جلسه برای همه شرکت‌کنندگان بدون قطع کردن گفت‌وگو.</p>
+      <span class="feature-meta">Chat</span>
+    </article>
+
+    <article class="feature-card">
+      <div class="feature-number">05</div>
+      <h3>پیام خصوصی</h3>
+      <p>ارسال پیام مستقیم به یک شرکت‌کننده، جدا از گفت‌وگوی عمومی جلسه.</p>
+      <span class="feature-meta">Private</span>
+    </article>
+
+    
+
+    <article class="feature-card">
+      <div class="feature-number">06</div>
+      <h3>وایت‌بورد</h3>
+      <p>نوشتن، طراحی و توضیح ایده‌ها روی تخته سفید مشترک داخل جلسه.</p>
+      <span class="feature-meta">Whiteboard</span>
+    </article>
+
+    <article class="feature-card">
+      <div class="feature-number">07</div>
+      <h3>ضبط جلسه</h3>
+      <p>ضبط جلسه برای مرور، آموزش یا نگهداری خروجی گفت‌وگو.</p>
+      <span class="feature-meta">Recording</span>
+    </article>
+
+    <article class="feature-card">
+      <div class="feature-number">08</div>
+      <h3>انتخاب دستگاه‌ها</h3>
+      <p>انتخاب دوربین، میکروفون و خروجی صدا قبل یا هنگام جلسه.</p>
+      <span class="feature-meta">Devices</span>
+    </article>
+
+    <article class="feature-card">
+      <div class="feature-number">09</div>
+      <h3>تصویر در تصویر</h3>
+      <p>ادامه مشاهده جلسه در حالت کوچک هنگام کار با پنجره‌های دیگر.</p>
+      <span class="feature-meta">PiP</span>
+    </article>
+
+    <article class="feature-card">
+      <div class="feature-number">10</div>
+      <h3>عکس از ویدئو</h3>
+      <p>گرفتن تصویر از ویدئوی جلسه یا اشتراک صفحه در لحظه.</p>
+      <span class="feature-meta">Snapshot</span>
+    </article>
+
+    <article class="feature-card">
+      <div class="feature-number">11</div>
+      <h3>کنترل جلسه</h3>
+      <p>مدیریت وضعیت دوربین، صدا، نمایش، شرکت‌کنندگان و ابزارهای جلسه.</p>
+      <span class="feature-meta">Controls</span>
+    </article>
+  </div>
+</section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap">
+        <div class="footer-shell">
+          <div class="footer-main">
+            <div class="footer-brand-block">
+              <div class="footer-logo">
+                <img class="brand-mark" src="../images/logo.svg" alt="meetazi logo" />
+                <span class="brand-text">meet<span>azi</span></span>
+              </div>
+
+              <p class="footer-summary">
+                میتازی راهی ساده برای ساخت جلسه آنلاین، اشتراک لینک و ورود سریع به تماس است؛
+                سبک، سریع و مناسب استفاده روزمره، کاری و آموزشی.
+              </p>
+
+              <div class="footer-source">
+                میتازی بر پایه پروژه متن‌باز
+                <a href="https://github.com/miroslavpejic85/mirotalk" target="_blank" rel="noopener noreferrer">MiroTalk P2P</a>
+                و تحت مجوز
+                <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer">AGPL-3.0</a>
+                ساخته شده است.
+              </div>
+            </div>
+
+            <div class="footer-right">
+              <div class="footer-label">لینک‌ها</div>
+
+              <div class="footer-socials">
+                <a class="footer-social" href="https://x.com/the_azzi" target="_blank" rel="noopener noreferrer">X</a>
+                <a class="footer-social" href="https://t.me/luluch_code" target="_blank" rel="noopener noreferrer">تلگرام</a>
+                <a class="footer-social" href="https://github.com/TheGreatAzizi" target="_blank" rel="noopener noreferrer">گیت‌هاب</a>
+                <a class="footer-social" href="https://theazizi.ir" target="_blank" rel="noopener noreferrer">وب‌سایت</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer-bottom">
+            <span>© ۱۴۰۵ میتازی. تمامی حقوق محفوظ است.</span>
+            <span>جلسه آنلاین ساده و سریع</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+  function sanitizeRoom(value) {
+    return (value || '')
+      .trim()
+      .replace(/[^a-zA-Z0-9\-_]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '')
+      .toLowerCase()
+      .substring(0, 40);
+  }
+
+  function makeRandomRoom() {
+    const words = ['nova', 'wave', 'room', 'sync', 'team', 'call', 'meet', 'desk', 'loop', 'base'];
+    const word = words[Math.floor(Math.random() * words.length)];
+    const number = Math.floor(1000 + Math.random() * 9000);
+    return word + '-' + number;
+  }
+
+  function getRoom() {
+    const input = document.getElementById('room');
+    const room = sanitizeRoom(input.value);
+    return room || makeRandomRoom();
+  }
+
+  function buildJoinUrl(room) {
+    const params = new URLSearchParams({
+      room: room,
+      audio: '1',
+      video: '1',
+      chat: '1',
+      notify: '1'
+    });
+
+    return window.location.origin + '/join?' + params.toString();
+  }
+
+  function buildPublicRoomLink(room) {
+    return window.location.origin + '/join?room=' + encodeURIComponent(room);
+  }
+
+  function updatePreview() {
+    const input = document.getElementById('room');
+    const room = sanitizeRoom(input.value);
+    const previewRoom = document.getElementById('previewRoom');
+    const previewBase = document.getElementById('previewBase');
+
+    previewBase.textContent = (window.location.hostname || 'meetazi.ir') + '/join?room=';
+    previewRoom.textContent = room || 'team-meeting';
+  }
+
+  function randomizeRoom() {
+    const input = document.getElementById('room');
+    input.value = makeRandomRoom();
+    updatePreview();
+    input.focus();
+  }
+
+  function joinRoom() {
+    const room = getRoom();
+    window.location.href = buildJoinUrl(room);
+  }
+
+  function copyRoomLink() {
+    const input = document.getElementById('room');
+
+    if (!sanitizeRoom(input.value)) {
+      input.value = makeRandomRoom();
+      updatePreview();
+    }
+
+    const room = sanitizeRoom(input.value);
+    const link = buildPublicRoomLink(room);
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(showFeedback).catch(function() {
+        fallbackCopy(link);
+      });
+    } else {
+      fallbackCopy(link);
+    }
+  }
+
+  function fallbackCopy(text) {
+    const area = document.createElement('textarea');
+    area.value = text;
+    area.style.position = 'fixed';
+    area.style.opacity = '0';
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand('copy');
+    document.body.removeChild(area);
+    showFeedback();
+  }
+
+  function showFeedback() {
+    const feedback = document.getElementById('feedback');
+    feedback.classList.add('show');
+    setTimeout(function() {
+      feedback.classList.remove('show');
+    }, 2200);
+  }
+
+  document.getElementById('room').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      joinRoom();
+    }
+  });
+
+  updatePreview();
+</script>
+</body>
+</html>
+
+
+
+
+

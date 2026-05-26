@@ -1,0 +1,11 @@
+﻿/* Google Translate UI disabled for meetazi. */
+#google_translate_element,
+.skiptranslate,
+.goog-te-banner-frame,
+.goog-te-gadget {
+  display: none !important;
+  visibility: hidden !important;
+}
+body {
+  top: 0 !important;
+}

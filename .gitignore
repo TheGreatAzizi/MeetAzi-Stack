@@ -44,3 +44,24 @@ Thumbs.db
 
 # Generated tree file
 folder-tree.txt
+
+# Avoid committing duplicate outer MiruTalk copy
+mirotalk/*
+!mirotalk/mirotalk/
+!mirotalk/mirotalk/**
+
+# Backups inside MiruTalk
+**/backup-*/
+**/backup-*
+
+# Logs
+**/*.log
+
+# Secrets / runtime
+**/.env
+**/.env.*
+!**/.env.template
+**/cert.pem
+**/key.pem
+**/*.pem
+**/*.key

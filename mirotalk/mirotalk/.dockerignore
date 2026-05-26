@@ -1,0 +1,16 @@
+# git folder
+.git
+.gitignore
+
+# npm
+node_modules
+npm-debug.log
+
+# mac
+.DS_Store
+
+# cache
+.cache
+
+# personal env
+.env

@@ -1,0 +1,1652 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Title and Icon -->
+
+        <title id="clientTitle">MiroTalk WebRTC Video call, Chat Room & Screen Sharing.</title>
+        <link id="icon" rel="shortcut icon" href="../images/logo.svg" />
+        <link id="appleTouchIcon" rel="apple-touch-icon" href="../images/logo.svg" />
+
+        <!-- Meta Information -->
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+        />
+        <meta
+            name="description"
+            content="MiroTalk powered by WebRTC, Real-time Simple Secure Fast video calls, chat and screen sharing capabilities in the browser, from your mobile or desktop."
+        />
+
+        <!-- https://ogp.me -->
+
+        <meta property="og:type" content="{{OG_TYPE}}" />
+        <meta property="og:site_name" content="{{OG_SITE_NAME}}" />
+        <meta property="og:title" content="{{OG_TITLE}}" />
+        <meta property="og:description" content="{{OG_DESCRIPTION}}" />
+        <meta property="og:image" content="{{OG_IMAGE}}" />
+        <meta property="og:url" content="{{OG_URL}}" />
+
+        <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon.png" />
+
+        <!-- StyleSheet -->
+
+        <link rel="stylesheet" href="../css/client.css" />
+        <link rel="stylesheet" href="../css/videoGrid.css" />
+        <link rel="stylesheet" href="../css/whiteboard.css" />
+
+        <!-- https://cdnjs.com/libraries/font-awesome -->
+
+        <link rel="stylesheet" href="../vendor/fontawesome/css/all.min.css" />
+
+        <!-- https://animate.style 4 using for swal fadeIn-Out -->
+
+        <link rel="stylesheet" href="../vendor/animate/animate.min.css" />
+
+        <!-- flatpickr  https://flatpickr.js.org/themes/ -->
+
+        <link rel="stylesheet" href="../vendor/flatpickr/flatpickr.min.css" />
+        <link rel="stylesheet" href="../vendor/flatpickr/themes/airbnb.css" />
+
+        <!--  pickr  https://github.com/simonwep/pickr -->
+
+        <!-- 'classic' theme -->
+        <link rel="stylesheet" href="../vendor/pickr/themes/classic.min.css" />
+        <!-- 'monolith' theme -->
+        <link rel="stylesheet" href="../vendor/pickr/themes/monolith.min.css" />
+        <!-- 'nano' theme -->
+        <link rel="stylesheet" href="../vendor/pickr/themes/nano.min.css" />
+
+        <!-- Highlight  https://github.com/highlightjs/highlight.js -->
+
+        <link
+            rel="stylesheet"
+            href="../vendor/highlight/styles/atom-one-dark.min.css"
+        />
+
+        <!-- JavaScripts -->
+
+        <script async src="../js/stats.js"></script>
+  <link rel="stylesheet" href="../css/meetazi-chat-placeholder-fix.css?v=1" />
+</head>
+
+    <body>
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+
+        <!-- Disconnect banner -->
+
+        <div id="disconnectBanner" class="disconnect-banner" role="status" aria-live="assertive" aria-atomic="true">
+            <div class="disconnect-banner-inner">
+                <span class="disconnect-banner-icon-wrap">
+                    <i id="disconnectBannerIcon" class="fa-solid fa-wifi-exclamation"></i>
+                </span>
+                <div class="disconnect-banner-text">
+                    <span id="disconnectBannerTitle">Connection lost</span>
+                    <span id="disconnectBannerMsg">Reconnecting to signaling server&hellip;</span>
+                </div>
+                <span class="disconnect-banner-spinner" id="disconnectBannerSpinner">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                </span>
+            </div>
+        </div>
+
+        <!-- just 4SEO Optimization -->
+
+        <div id="webRTCSeo">
+            <h1>WebRTC</h1>
+        </div>
+
+        <!-- show this before to join -->
+
+        <div id="loadingDiv" class="center">
+            <div class="loading-spinner">
+                <div class="spinner-ring"></div>
+                <img class="spinner-logo" src="../images/logo.svg" alt="logo" />
+            </div>
+            <h1>Loading</h1>
+            <pre>
+Please allow the camera or microphone
+access to use this app.
+            </pre>
+        </div>
+
+        <!-- Scan to Join -->
+
+        <div id="qrRoomPopupContainer" class="top-center fadein">
+            <canvas id="qrRoomPopup"></canvas>
+            <div id="qrText">Scan to join the room</div>
+        </div>
+
+        <!-- init user devices -->
+
+        <div id="initUser" class="init-user hidden">
+            <!-- <p>Please allow the camera & microphone access to use this app.</p> -->
+            <div id="initVideoContainer" class="init-video-container">
+                <div id="initVideoLoader" class="init-video-loader">
+                    <div class="loading-spinner">
+                        <div class="spinner-ring"></div>
+                        <img class="spinner-logo" src="../images/logo.svg" alt="logo" />
+                    </div>
+                </div>
+                <video id="initVideo" playsinline="true" autoplay="" class="mirror"></video>
+            </div>
+            <div class="initComands">
+                <button id="initVideoBtn" class="fas fa-video"></button>
+                <button id="initAudioBtn" class="fas fa-microphone"></button>
+                <button id="initScreenShareBtn" class="fas fa-desktop"></button>
+                <button id="initVideoMirrorBtn" class="fas fa-arrow-right-arrow-left"></button>
+                <button id="initUsernameEmojiButton" class="fas fa-smile"></button>
+                <button id="initExitBtn" class="fas fa-sign-out-alt red"></button>
+                <select id="initVideoSelect" class="form-select text-light bg-dark"></select>
+                <select id="initMicrophoneSelect" class="form-select text-light bg-dark"></select>
+                <select id="initSpeakerSelect" class="form-select text-light bg-dark"></select>
+            </div>
+        </div>
+
+        <!-- Add emoji to username -->
+
+        <div id="usernameEmoji" class="usernameEmoji fadein center hidden"></div>
+
+        <!-- Start bottom buttons -->
+        <div id="bottomButtons" class="fadein">
+            <div id="audioSplit" class="split-btn">
+                <button id="audioBtn" class="fas fa-microphone"></button>
+                <div id="audioDropdown" class="dropdown dropup hidden">
+                    <button
+                        id="audioToggle"
+                        class="dropdown-toggle device-dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        aria-label="Select microphone"
+                    >
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                    <div
+                        id="audioMenu"
+                        class="dropdown-menu text-start app-dropdown-menu"
+                        aria-labelledby="audioToggle"
+                    ></div>
+                </div>
+            </div>
+            <div id="videoSplit" class="split-btn">
+                <button id="videoBtn" class="fas fa-video"></button>
+                <div id="videoDropdown" class="dropdown dropup hidden">
+                    <button
+                        id="videoToggle"
+                        class="dropdown-toggle device-dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        aria-label="Select camera"
+                    >
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                    <div
+                        id="videoMenu"
+                        class="dropdown-menu text-start app-dropdown-menu"
+                        aria-labelledby="videoToggle"
+                    ></div>
+                </div>
+            </div>
+
+            <button id="swapCameraBtn" class="fas fa-camera-rotate"></button>
+            <button id="screenShareBtn" class="fas fa-desktop"></button>
+            <button id="myHandBtn" class="fas fa-hand-paper"></button>
+            <button id="chatRoomBtn" class="fas fa-comment"></button>
+            <button id="participantsBtn" class="fas fa-users">
+                <span id="participantsCountBadge"></span>
+            </button>
+
+            <div id="settingsSplit" class="split-btn">
+                <button id="mySettingsBtn" class="fas fa-cogs"></button>
+                <div id="settingsExtraDropdown" class="dropdown dropup">
+                    <button
+                        id="settingsExtraToggle"
+                        class="dropdown-toggle device-dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        aria-label="Settings menu"
+                    >
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                    <div
+                        id="settingsExtraMenu"
+                        class="dropdown-menu text-start hidden app-dropdown-menu"
+                        aria-labelledby="settingsExtraToggle"
+                    >
+                        <!-- SHARING -->
+                        <div class="device-menu-header extra-menu-group" data-buttons="shareRoomBtn,fileShareBtn">
+                            SHARING
+                        </div>
+                        <button id="shareRoomBtn" class="app-dropdown-action">
+                            <i class="fas fa-share-alt"></i> Share Room
+                        </button>
+                        <button id="fileShareBtn" class="app-dropdown-action">
+                            <i class="fas fa-folder-open"></i> File sharing
+                        </button>
+
+                        <div class="device-menu-divider extra-menu-divider" data-group="sharing"></div>
+
+                        <!-- RECORDING & CAPTURE -->
+                        <div class="device-menu-header extra-menu-group" data-buttons="recordStreamBtn,snapshotRoomBtn">
+                            RECORDING & CAPTURE
+                        </div>
+                        <button id="recordStreamBtn" class="app-dropdown-action">
+                            <i class="fas fa-record-vinyl"></i> Start Recording
+                        </button>
+                        <button id="snapshotRoomBtn" class="app-dropdown-action">
+                            <i class="fas fa-camera-retro"></i> Snapshot
+                        </button>
+
+                        <div class="device-menu-divider extra-menu-divider" data-group="recording"></div>
+
+                        <!-- TOOLS -->
+                        <div
+                            class="device-menu-header extra-menu-group"
+                            data-buttons="captionBtn,whiteboardBtn,documentPiPBtn,roomEmojiPickerBtn"
+                        >
+                            TOOLS
+                        </div>
+                        <button id="captionBtn" class="app-dropdown-action">
+                            <i class="fas fa-closed-captioning"></i> Transcription
+                        </button>
+                        <button id="whiteboardBtn" class="app-dropdown-action">
+                            <i class="fas fa-chalkboard-teacher"></i> Whiteboard
+                        </button>
+                        <button id="documentPiPBtn" class="app-dropdown-action">
+                            <i class="fas fa-images"></i> Document PiP
+                        </button>
+                        <button id="roomEmojiPickerBtn" class="app-dropdown-action">
+                            <i class="fas fa-face-smile"></i> Room Emoji
+                        </button>
+
+                        <div class="device-menu-divider extra-menu-divider" data-group="tools"></div>
+
+                        <!-- VIEW & SETTINGS -->
+                        <div
+                            class="device-menu-header extra-menu-group"
+                            data-buttons="hideMeBtn,fullScreenBtn,aboutBtn"
+                        >
+                            VIEW & SETTINGS
+                        </div>
+                        <button id="hideMeBtn" class="app-dropdown-action"><i class="fas fa-user"></i> Hide Me</button>
+                        <button id="fullScreenBtn" class="app-dropdown-action">
+                            <i class="fas fa-expand-alt"></i> Full Screen
+                        </button>
+                        <button id="aboutBtn" class="app-dropdown-action"><i class="fas fa-question"></i> About</button>
+                    </div>
+                </div>
+            </div>
+
+            <button id="leaveRoomBtn" class="fa-solid fa-phone-slash"></button>
+        </div>
+
+        <!-- End bottom buttons -->
+
+        <!-- Start room emoji picker -->
+
+        <div id="emojiPickerContainer" class="roomEmoji fadein"></div>
+        <div id="userEmoji" class="userEmoji"></div>
+
+        <!-- End room emoji picker -->
+
+        <!-- Start chat room 
+        https://codepen.io/sajadhsm/pen/odaBdd
+        https://getemoji.com
+        -->
+
+        <section id="msgerDraggable" class="msger-draggable fadein">
+            <section id="msger" class="msger">
+                <header id="msgerHeader" class="msger-header">
+                    <div class="msger-header-title">
+                        <div class="msger-panel-heading msger-panel-heading-compact">
+                            <span class="msger-sidebar-label">Chat</span>
+                            <h3>Messages</h3>
+                        </div>
+                    </div>
+                    <div class="msger-header-options">
+                        <button id="msgerCPBtn" class="fas fa-users msger-header-participants-btn hidden"></button>
+                        <button id="msgerTogglePin" class="fas fa-map-pin"></button>
+                        <button id="msgerTheme" class="fas fa-ghost"></button>
+                        <button id="msgerMaxBtn" class="fas fa-expand"></button>
+                        <button id="msgerMinBtn" class="fas fa-compress"></button>
+                        <div class="dropdown-custom">
+                            <button
+                                class="dropdown-toggle-custom"
+                                type="button"
+                                id="msgerDropDownMenuBtn"
+                                data-bs-toggle="dropdown-custom"
+                                aria-expanded="false"
+                            >
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <ul
+                                id="msgerDropDownContent"
+                                class="dropdown-menu-custom app-dropdown-menu"
+                                aria-labelledby="msgerDropDownMenuBtn"
+                            >
+                                <li>
+                                    <div id="msgerShowChatOnMsgDiv" class="transcription-switch-row">
+                                        <i class="fa-solid fa-eye"></i>
+                                        <span class="transcription-switch-label">Show on msg</span>
+                                        <label class="switch">
+                                            <input id="msgerShowChatOnMsg" type="checkbox" checked />
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li id="msgerSpeechMsgDiv">
+                                    <div class="transcription-switch-row">
+                                        <i class="fas fa-volume-high"></i>
+                                        <span class="transcription-switch-label">Speech msg</span>
+                                        <label class="switch">
+                                            <input id="msgerSpeechMsg" type="checkbox" />
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                    <hr />
+                                </li>
+                                <li class="msger-menu-action-row">
+                                    <button
+                                        id="msgerSaveBtn"
+                                        class="app-dropdown-action msger-menu-action"
+                                        type="button"
+                                    >
+                                        <span class="msger-menu-action-icon">
+                                            <i class="fas fa-save"></i>
+                                        </span>
+                                        <span class="msger-menu-action-label">Save All messages</span>
+                                    </button>
+                                </li>
+                                <li class="msger-menu-action-row">
+                                    <button
+                                        id="msgerClean"
+                                        class="app-dropdown-action msger-menu-action msger-menu-action-danger"
+                                        type="button"
+                                    >
+                                        <span class="msger-menu-action-icon">
+                                            <i class="fas fa-trash"></i>
+                                        </span>
+                                        <span class="msger-menu-action-label">Clean All messages</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <button id="msgerClose" class="fas fa-times"></button>
+                    </div>
+                </header>
+
+                <div class="msger-layout">
+                    <aside class="msger-sidebar">
+                        <div class="msger-sidebar-header">
+                            <div class="msger-panel-heading">
+                                <h3>Participants</h3>
+                            </div>
+                            <div class="msger-header-options msger-sidebar-header-options">
+                                <div class="dropdown-custom">
+                                    <button
+                                        class="dropdown-toggle-custom"
+                                        type="button"
+                                        id="msgerSidebarDropDownMenuBtn"
+                                        data-bs-toggle="dropdown-custom"
+                                        aria-expanded="false"
+                                    >
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul
+                                        id="msgerSidebarDropDownContent"
+                                        class="dropdown-menu-custom app-dropdown-menu msger-participant-dropdown-menu msger-room-actions-menu"
+                                        aria-labelledby="msgerSidebarDropDownMenuBtn"
+                                    ></ul>
+                                </div>
+                                <button id="msgerSidebarCloseBtn" class="fas fa-times"></button>
+                            </div>
+                        </div>
+
+                        <section class="msger-sidebar-section">
+                            <span class="msger-sidebar-label">Room chat</span>
+                            <div class="msger-chat-list">
+                                <button id="msgerRoomChatItem" class="msger-chat-item active" type="button">
+                                    <span class="msger-chat-item-icon"><i class="fas fa-comments"></i></span>
+                                    <span class="msger-chat-item-copy">
+                                        <strong>Room chat</strong>
+                                        <small>Message everyone</small>
+                                    </span>
+                                    <span id="msgerRoomChatBadge" class="msger-chat-unread-badge hidden">0</span>
+                                </button>
+                            </div>
+                        </section>
+
+                        <section class="msger-sidebar-section">
+                            <div class="msger-sidebar-row">
+                                <span class="msger-sidebar-label">Participants</span>
+                            </div>
+                            <div class="search-container search-container-sidebar">
+                                <label class="msger-search-field" for="searchPeerBarName">
+                                    <span class="msger-search-icon"><i class="fas fa-search"></i></span>
+                                    <span class="msger-search-copy">
+                                        <input
+                                            id="searchPeerBarName"
+                                            type="text"
+                                            placeholder="Filter participants"
+                                            maxlength="254"
+                                            name="search"
+                                        />
+                                    </span>
+                                </label>
+                            </div>
+                            <div id="msgerPrivateChatsEmpty" class="msger-sidebar-empty">
+                                <svg
+                                    class="msger-sidebar-empty-icon"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <circle cx="12" cy="7" r="3" />
+                                    <path d="M5.5 21c0-3.59 2.91-6.5 6.5-6.5s6.5 2.91 6.5 6.5" />
+                                    <circle cx="4" cy="11" r="2" />
+                                    <path d="M1 21c0-2.21 1.34-4 3-4" />
+                                    <circle cx="20" cy="11" r="2" />
+                                    <path d="M23 21c0-2.21-1.34-4-3-4" />
+                                </svg>
+                                <span>Participants will appear here when other people join the room.</span>
+                            </div>
+                            <div id="msgerCPList" class="msger-chat-list msger-private-chat-list"></div>
+                        </section>
+                    </aside>
+
+                    <section class="msger-main">
+                        <div class="msger-conversation-banner">
+                            <div class="msger-panel-heading msger-panel-heading-compact">
+                                <span id="msgerConversationLabel" class="msger-sidebar-label">Current view</span>
+                                <h3 id="msgerConversationTitle">All messages</h3>
+                            </div>
+                            <p id="msgerConversationMeta" class="msger-conversation-meta">
+                                Public messages and direct replies appear here.
+                            </p>
+                        </div>
+
+                        <main id="msgerChat" class="msger-chat">
+                            <!-- EMPTY CHAT ILLUSTRATION -->
+                            <div id="msgerEmptyNotice" class="empty-chat-notice">
+                                <img alt="Empty chat illustration" class="empty-chat-img" src="../svg/emptyChat.svg" />
+                                <h5 class="empty-chat-title">Start Conversation</h5>
+                                <p class="empty-chat-desc">
+                                    There are no messages here yet. Start a conversation by sending a message.
+                                </p>
+                            </div>
+                            <!-- Chat messages will be appended here -->
+                        </main>
+
+                        <div class="msger-composer">
+                            <section id="msgerEmojiPicker" class="hidden fadein chatEmojiPicker"></section>
+
+                            <div class="msger-inputarea">
+                                <textarea
+                                    rows="1"
+                                    cols="1"
+                                    id="msgerInput"
+                                    class="msger-input"
+                                    placeholder="Write a message..."
+                                ></textarea>
+                            </div>
+
+                            <div class="msger-input-buttons">
+                                <button id="msgerEmojiBtn" class="fas fa-smile"></button>
+                                <button id="msgerMarkdownBtn" class="fab fa-markdown"></button>
+                                <button id="msgerShareFileBtn" class="fas fa-paperclip"></button>
+                                <button id="msgerVideoUrlBtn" class="fab fa-youtube"></button>
+                                <button id="msgerCleanTextBtn" class="fas fa-trash"></button>
+                                <button id="msgerPasteBtn" class="fas fa-paste"></button>
+                                <button id="msgerSendBtn" class="fas fa-paper-plane"></button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="msgerCP" class="fadein" aria-hidden="true">
+                        <header id="msgerCPHeader" class="msger-private-header">
+                            <div class="msger-panel-heading msger-panel-heading-compact">
+                                <span class="msger-sidebar-label">Participants</span>
+                                <h3>People here</h3>
+                            </div>
+                            <div class="msger-header-options">
+                                <!-- More options -->
+                                <div id="tabRoomParticipants" class="dropdown-custom">
+                                    <button
+                                        class="dropdown-toggle-custom"
+                                        type="button"
+                                        id="msgerCPDropDownMenuBtn"
+                                        data-bs-toggle="dropdown-custom"
+                                        aria-expanded="false"
+                                    >
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul
+                                        id="msgerCPDropDownContent"
+                                        class="dropdown-menu-custom app-dropdown-menu msger-participant-dropdown-menu msger-room-actions-menu"
+                                        aria-labelledby="msgerCPDropDownMenuBtn"
+                                    ></ul>
+                                </div>
+                                <button id="msgerCPCloseBtn" class="fas fa-times"></button>
+                            </div>
+                        </header>
+                        <main id="msgerCPChat" class="msger-chat">
+                            <!-- EMPTY PARTICIPANTS ILLUSTRATION -->
+                            <div id="msgerEmptyParticipantsNotice" class="empty-participants-notice">
+                                <img
+                                    alt="Empty participants illustration"
+                                    class="empty-participants-img"
+                                    src="../svg/emptyParticipants.svg"
+                                />
+                                <h5 class="empty-participants-title">Participants</h5>
+                                <p class="empty-participants-desc">There are no participants here yet.</p>
+                            </div>
+                            <div id="msgerParticipantsList" class="msger-participants-list"></div>
+                        </main>
+                    </section>
+
+                    <!-- End private msg -->
+                </div>
+            </section>
+        </section>
+
+        <!-- End chat room -->
+
+        <!-- Start of caption section -->
+
+        <section id="captionDraggable" class="caption-draggable fadein">
+            <section id="caption" class="caption">
+                <header id="captionHeader" class="caption-header">
+                    <div class="caption-header-title">
+                        <button id="speechRecognitionIcon" class="fas fa-microphone-alt"></button>
+                    </div>
+                    <div class="caption-header-options">
+                        <button id="captionTogglePin" class="fas fa-map-pin"></button>
+                        <button id="captionMaxBtn" class="fas fa-expand"></button>
+                        <button id="captionMinBtn" class="fas fa-compress"></button>
+                        <button id="captionTheme" class="fas fa-ghost"></button>
+                        <div class="dropdown-custom">
+                            <button
+                                class="dropdown-toggle-custom"
+                                type="button"
+                                id="captionDropDownMenuBtn"
+                                data-bs-toggle="dropdown-custom"
+                                aria-expanded="false"
+                            >
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <ul
+                                id="captionDropDownContent"
+                                class="dropdown-menu-custom app-dropdown-menu"
+                                aria-labelledby="captionDropDownMenuBtn"
+                            >
+                                <li>
+                                    <div class="transcription-switch-row">
+                                        <i class="fa-solid fa-eye"></i>
+                                        <span class="transcription-switch-label">Show on msg</span>
+                                        <label class="switch">
+                                            <input id="transcriptShowOnMsg" type="checkbox" checked />
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="transcription-switch-row">
+                                        <i class="fa-solid fa-share-nodes"></i>
+                                        <span class="transcription-switch-label">Send to all</span>
+                                        <label class="switch">
+                                            <input id="transcriptSendToAll" type="checkbox" checked />
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                    <hr />
+                                </li>
+                                <li class="msger-menu-action-row">
+                                    <button
+                                        id="captionSaveBtn"
+                                        class="app-dropdown-action msger-menu-action"
+                                        type="button"
+                                    >
+                                        <span class="msger-menu-action-icon">
+                                            <i class="fas fa-save"></i>
+                                        </span>
+                                        <span class="msger-menu-action-label">Save messages</span>
+                                    </button>
+                                </li>
+                                <li class="msger-menu-action-row">
+                                    <button
+                                        id="captionClean"
+                                        class="app-dropdown-action msger-menu-action msger-menu-action-danger"
+                                        type="button"
+                                    >
+                                        <span class="msger-menu-action-icon">
+                                            <i class="fas fa-trash"></i>
+                                        </span>
+                                        <span class="msger-menu-action-label">Clean messages</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <button id="captionClose" class="fas fa-times"></button>
+                    </div>
+                </header>
+
+                <main id="captionChat" class="caption-chat">
+                    <!-- EMPTY CAPTION ILLUSTRATION -->
+                    <div id="captionEmptyNotice" class="empty-caption-notice">
+                        <img alt="Empty caption illustration" class="empty-caption-img" src="../svg/emptyCaption.svg" />
+                        <h5 class="empty-caption-title">Start Caption</h5>
+                        <p class="empty-caption-desc">No captions yet. Click "Start" to begin live captions.</p>
+                    </div>
+                </main>
+                <div id="captionFooter" class="caption-inputarea">
+                    <select id="recognitionLanguage"></select>
+                    <select id="recognitionDialect"></select>
+                    <button id="speechRecognitionStart"><i class="fas fa-play"></i></button>
+                    <button id="speechRecognitionStop"><i class="fas fa-stop"></i></button>
+                </div>
+            </section>
+        </section>
+
+        <!-- End of caption section -->
+
+        <!-- Start my settings -->
+
+        <section id="mySettings" class="center fadein">
+            <header id="mySettingsHeader">
+                <button id="mySettingsCloseBtn" class="fas fa-times"></button>
+            </header>
+            <main class="mySettingsMain">
+                <div class="tab">
+                    <button id="tabRoomBtn" class="fas fa-home tablinks">
+                        <p class="tabButtonText">Room</p>
+                    </button>
+                    <button id="tabVideoBtn" class="fas fa-video tablinks">
+                        <p class="tabButtonText">Video</p>
+                    </button>
+                    <button id="tabAudioBtn" class="fas fa-microphone tablinks">
+                        <p class="tabButtonText">Audio</p>
+                    </button>
+                    <button id="tabRecordingBtn" class="fas fa-record-vinyl tablinks">
+                        <p class="tabButtonText">Recording</p>
+                    </button>
+                    <button id="tabVideoShareBtn" class="fab fa-youtube tablinks">
+                        <p class="tabButtonText">Media</p>
+                    </button>
+                    <button id="tabProfileBtn" class="fa-solid fa-user tablinks">
+                        <p class="tabButtonText">Profile</p>
+                    </button>
+                    <button id="tabShortcutsBtn" class="fas fa-keyboard tablinks">
+                        <p class="tabButtonText">Shortcuts</p>
+                    </button>
+                    <button id="tabNetworkBtn" class="fa-solid fa-network-wired tablinks">
+                        <p class="tabButtonText">Network</p>
+                    </button>
+                    <button id="tabStylingBtn" class="fas fa-palette tablinks">
+                        <p class="tabButtonText">Style</p>
+                    </button>
+                    <button id="tabLanguagesBtn" class="fas fa-globe tablinks">
+                        <p class="tabButtonText">Language</p>
+                    </button>
+                </div>
+
+                <div class="tabActions">
+                    <div id="tabRoom" class="tabcontent">
+                        <table class="mySettingsTable">
+                            <tr>
+                                <td>
+                                    <div class="title">
+                                        <i class="fa-solid fa-person-shelter"></i>
+                                        <p id="myRoomId" class="cp">xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <button id="activeRoomsBtn">
+                            <i class="fa-solid fa-circle-dot"></i>
+                            <p>Active rooms</p>
+                        </button>
+                        <div id="tabRoomSecurity">
+                            <button id="lockRoomBtn" class="orange">
+                                <i class="fas fa-lock-open orange"></i>&nbsp;Lock room
+                            </button>
+                            <button id="unlockRoomBtn" class="red">
+                                <i class="fas fa-lock red"></i>&nbsp;Unlock room
+                            </button>
+                            <br />
+                        </div>
+                        <div id="tabEmailInvitation">
+                            <button id="roomSendEmailBtn">
+                                <i class="fas fa-envelope-circle-check"></i>&nbsp;Send email invitation
+                                <br />
+                            </button>
+                        </div>
+                        <br />
+                        <br />
+                        <table id="mySettingsTable">
+                            <tr>
+                                <td class="w-80">
+                                    <div class="title">
+                                        <i class="fas fa-microphone-lines"></i>
+                                        <p>Volume bar</p>
+                                    </div>
+                                </td>
+                                <td><input id="switchAudioPitchBar" class="toggle" type="checkbox" checked /></td>
+                            </tr>
+                            <tr>
+                                <td class="w-80">
+                                    <div class="title">
+                                        <i class="fas fa-music"></i>
+                                        <p>Sounds</p>
+                                    </div>
+                                </td>
+                                <td><input id="switchSounds" class="toggle" type="checkbox" checked /></td>
+                            </tr>
+                            <tr id="shareOnJoinButton">
+                                <td class="w-80">
+                                    <div class="title">
+                                        <i class="fas fa-share-alt"></i>
+                                        <p>Share</p>
+                                    </div>
+                                </td>
+                                <td><input id="switchShare" class="toggle" type="checkbox" checked /></td>
+                            </tr>
+                            <tr id="keepButtonsVisibleButton">
+                                <td class="w-80">
+                                    <div class="title">
+                                        <i class="fas fa-eye"></i>
+                                        <p>Buttons</p>
+                                    </div>
+                                </td>
+                                <td><input id="switchKeepButtonsVisible" class="toggle" type="checkbox" /></td>
+                            </tr>
+                            <tr id="keepAwakeButton">
+                                <td class="w-80">
+                                    <div class="title">
+                                        <i class="fa-solid fa-mobile-screen"></i>
+                                        <p>Keep awake</p>
+                                    </div>
+                                </td>
+                                <td><input id="switchKeepAwake" class="toggle" type="checkbox" /></td>
+                            </tr>
+                            <tr id="pinChatByDefaultRow">
+                                <td class="w-80">
+                                    <div class="title">
+                                        <i class="fas fa-comments"></i>
+                                        <p>Pin chat</p>
+                                    </div>
+                                </td>
+                                <td><input id="switchPinChatByDefault" class="toggle" type="checkbox" /></td>
+                            </tr>
+                        </table>
+                        <br />
+                        <table id="mySettingsTable">
+                            <tr>
+                                <td>
+                                    <div class="title">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <span id="mySessionTime">0s</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div id="tabVideo" class="tabcontent">
+                        <div id="videoSourceDiv">
+                            <div class="title">
+                                <i class="fas fa-video"></i>
+                                <p>Video Source</p>
+                            </div>
+                            <br />
+                            <select id="videoSource"></select>
+                            <br />
+                        </div>
+                        <div class="title">
+                            <i class="fas fa-palette"></i>
+                            <p>Video Quality</p>
+                        </div>
+                        <br />
+                        <select id="videoQuality">
+                            <option value="default">Default</option>
+                            <option value="qvga">QVGA</option>
+                            <option value="vga">VGA</option>
+                            <option value="hd">HD</option>
+                            <option value="fhd">FULL HD</option>
+                            <option value="2k">2k</option>
+                            <option value="4k">4K</option>
+                            <option value="6k">6K</option>
+                            <option value="8k">8K</option>
+                        </select>
+                        <div id="videoFitDiv">
+                            <br />
+                            <div class="title">
+                                <i class="fa-solid fa-film"></i>
+                                <p>Video fit</p>
+                            </div>
+                            <br />
+                            <select id="videoObjFitSelect">
+                                <option value="fill">Fill</option>
+                                <option value="contain">Contain</option>
+                                <option value="cover">Cover</option>
+                                <option value="scale-down">Scale-down</option>
+                                <option value="none">None</option>
+                            </select>
+                        </div>
+                        <div id="videoFpsDiv">
+                            <br />
+                            <div class="title">
+                                <i class="fa-solid fa-camera"></i>
+                                <p>Camera FPS</p>
+                            </div>
+                            <br />
+                            <select id="videoFps">
+                                <option value="60">60 - frame-per-second</option>
+                                <option value="30">30 - frame-per-second</option>
+                                <option value="15">15 - frame-per-second</option>
+                                <option value="5">5 - frame-per-second</option>
+                            </select>
+                        </div>
+                        <div id="screenFpsDiv">
+                            <br />
+                            <div class="title">
+                                <i class="fa-solid fa-desktop"></i>
+                                <p>Screen FPS</p>
+                            </div>
+                            <br />
+                            <select id="screenFps">
+                                <option value="60">60 - frame-per-second</option>
+                                <option value="30">30 - frame-per-second</option>
+                                <option value="15">15 - frame-per-second</option>
+                                <option value="5">5 - frame-per-second</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="tabAudio" class="tabcontent">
+                        <div>
+                            <div class="title">
+                                <i class="fas fa-microphone"></i>
+                                <p>Microphone</p>
+                            </div>
+                            <br />
+                            <select id="audioSource"></select>
+                        </div>
+                        <br />
+                        <div class="volume-container">
+                            <div class="volume-bar"></div>
+                            <div class="volume-bar"></div>
+                            <div class="volume-bar"></div>
+                            <div class="volume-bar"></div>
+                            <div class="volume-bar"></div>
+                            <div class="volume-bar"></div>
+                            <div class="volume-bar"></div>
+                            <div class="volume-bar"></div>
+                            <div class="volume-bar"></div>
+                            <div class="volume-bar"></div>
+                        </div>
+                        <br />
+                        <div id="micOptionsDiv">
+                            <table id="mySettingsTable">
+                                <tr id="noiseSuppressionBtn">
+                                    <td class="w-80">
+                                        <div class="title">
+                                            <i class="fas fa-ear-listen"></i>
+                                            <p id="labelNoiseSuppression">Noise Suppression</p>
+                                        </div>
+                                    </td>
+                                    <td><input id="switchNoiseSuppression" class="toggle" type="checkbox" /></td>
+                                </tr>
+                            </table>
+                            <br /><br />
+                        </div>
+                        <div id="audioOutputDiv">
+                            <div class="title">
+                                <i class="fas fa-headphones"></i>
+                                <p>Speaker</p>
+                            </div>
+                            <br />
+                            <select id="audioOutput"></select>
+                            <button id="speakerTestBtn" class="buttons">
+                                <i class="fa-solid fa-circle-play"></i>
+                                <p>Test speaker</p>
+                            </button>
+                            <br /><br /><br /><br /><br />
+                        </div>
+                        <table id="mySettingsTable">
+                            <tr id="pushToTalkDiv">
+                                <td class="w-80">
+                                    <div class="title">
+                                        <i class="fa-solid fa-hand-pointer"></i>
+                                        <p>Push to talk</p>
+                                    </div>
+                                </td>
+                                <td><input id="switchPushToTalk" class="toggle" type="checkbox" /></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div id="tabRecording" class="tabcontent">
+                        <img id="recImage" src="../images/recording.png" />
+                        <div class="trow">
+                            <span class="clw notranslate" id="recordingTime"></span>
+                            <br />
+                            <button id="pauseRecBtn" class="buttons">
+                                <i class="far fa-pause-circle"></i>
+                                <p>Pause recording</p>
+                            </button>
+                            <button id="resumeRecBtn" class="buttons">
+                                <i class="far fa-play-circle"></i>
+                                <p>Resume recording</p>
+                            </button>
+                        </div>
+                        <div class="clw" id="lastRecordingInfo"></div>
+                    </div>
+
+                    <div id="tabMedia" class="tabcontent">
+                        <button id="shareMediaAudioVideoBtn" class="buttons">
+                            <i class="fa-solid fa-circle-play"></i>
+                            <p>Share a Video or Audio</p>
+                        </button>
+                    </div>
+
+                    <div id="tabParticipants" class="tabcontent">
+                        <div class="title">
+                            <i class="fa-solid fa-users"></i>
+                            <p id="peersCount"></p>
+                        </div>
+                    </div>
+
+                    <div id="tabShortcuts" class="tabcontent">
+                        <table class="mySettingsTable">
+                            <tr>
+                                <td>
+                                    <div class="title">
+                                        <i class="fa-solid fa-keyboard"></i>
+                                        <p>Keyboard shortcuts</p>
+                                    </div>
+                                </td>
+                                <td><input class="toggle" id="switchShortcuts" type="checkbox" /></td>
+                            </tr>
+                        </table>
+                        <div>
+                            <table id="shortcutsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Shortcut</th>
+                                        <th>Icon</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><i class="fa-solid fa-a"></i></td>
+                                        <td><i class="fas fa-microphone"></i></td>
+                                        <td><strong>Toggle</strong> microphone</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-v"></i></td>
+                                        <td><i class="fas fa-video"></i></td>
+                                        <td><strong>Toggle</strong> camera</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-s"></i></td>
+                                        <td><i class="fas fa-desktop"></i></td>
+                                        <td><strong>Toggle</strong> screen</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-h"></i></td>
+                                        <td><i class="fas fa-hand-paper"></i></td>
+                                        <td><strong>Toggle</strong> raise hand</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-c"></i></td>
+                                        <td><i class="fas fa-comments"></i></td>
+                                        <td><strong>Toggle</strong> chat</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-o"></i></td>
+                                        <td><i class="fas fa-cogs"></i></td>
+                                        <td><strong>Toggle</strong> settings</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-x"></i></td>
+                                        <td><i class="fas fa-user"></i></td>
+                                        <td><strong>Toggle</strong> hide myself</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-r"></i></td>
+                                        <td><i class="fas fa-record-vinyl"></i></td>
+                                        <td><strong>Toggle</strong> recording</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-e"></i></td>
+                                        <td><i class="fas fa-face-smile"></i></td>
+                                        <td><strong>Toggle</strong> emoji</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-k"></i></td>
+                                        <td><i class="fas fa-closed-captioning"></i></td>
+                                        <td><strong>Toggle</strong> captions</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-w"></i></td>
+                                        <td><i class="fas fa-chalkboard-teacher"></i></td>
+                                        <td><strong>Toggle</strong> whiteboard</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-d"></i></td>
+                                        <td><i class="fas fa-images"></i></td>
+                                        <td><strong>Toggle</strong> document PIP</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-t"></i></td>
+                                        <td><i class="fas fas fa-camera-retro"></i></td>
+                                        <td><strong>Snapshot</strong> screen/window/tab</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-f"></i></td>
+                                        <td><i class="fas fa-folder-open"></i></td>
+                                        <td><strong>Share</strong> the file</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="tabProfile" class="tabcontent">
+                        <div id="tabRoomPeerName">
+                            <div id="myProfileAvatarContainer">
+                                <img id="myProfileAvatar" />
+                                <div id="myProfileAvatarBtns">
+                                    <button id="myProfileAvatarUploadBtn">
+                                        <i class="fas fa-image"></i>&nbsp;Set avatar
+                                    </button>
+                                    <button id="myProfileAvatarResetBtn" class="hidden">
+                                        <i class="fas fa-rotate-left"></i>&nbsp;Reset avatar
+                                    </button>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="title">
+                                <i class="fas fa-user"></i>
+                                <p>Name</p>
+                            </div>
+                            <br /><br />
+                            <div id="myPeerNameSetContainer">
+                                <input id="myPeerNameSet" type="text" placeholder="Change name..." maxlength="254" />
+                                <button id="myPeerNameSetBtn"><i class="fas fa-user-edit"></i>&nbsp;Change</button>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="title">
+                            <i class="fa-solid fa-user-shield"></i>
+                            <p>Presenter:</p>
+                            <p id="isPeerPresenter">true</p>
+                        </div>
+                        <br /><br />
+                        <div class="title">
+                            <i class="fa-solid fa-circle-info"></i>
+                            <p>Extra info:</p>
+                        </div>
+                        <div class="extra-info-container">
+                            <div id="extraInfo"></div>
+                        </div>
+                    </div>
+
+                    <div id="tabNetwork" class="tabcontent">
+                        <table id="mySettingsTable">
+                            <tr>
+                                <td>
+                                    <div class="title">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        <p>IP</p>
+                                    </div>
+                                </td>
+                                <td><p id="networkIP"></p></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="title">
+                                        <i class="fa-solid fa-house-signal"></i>
+                                        <p>Host</p>
+                                    </div>
+                                </td>
+                                <td><p id="networkHost">🔴</p></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="title">
+                                        <i class="fa-solid fa-globe"></i>
+                                        <p>Stun</p>
+                                    </div>
+                                </td>
+                                <td><p id="networkStun">🔴</p></td>
+                            </tr>
+                            <tr id="shareOnJoinButton">
+                                <td>
+                                    <div class="title">
+                                        <i class="fa-solid fa-tower-cell"></i>
+                                        <p>Turn</p>
+                                    </div>
+                                </td>
+                                <td><p id="networkTurn">🔴</p></td>
+                            </tr>
+                        </table>
+
+                        <hr class="hr" />
+
+                        <table id="mySettingsTable">
+                            <tr>
+                                <td>
+                                    <div class="title">
+                                        <i class="fa-solid fa-upload"></i>
+                                        <p>Sent</p>
+                                    </div>
+                                </td>
+                                <td><p id="networkSent"></p></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="title">
+                                        <i class="fa-solid fa-download"></i>
+                                        <p>Received</p>
+                                    </div>
+                                </td>
+                                <td><p id="networkReceived"></p></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="title">
+                                        <i class="fa-solid fa-circle-exclamation"></i>
+                                        <p>Packet Lost</p>
+                                    </div>
+                                </td>
+                                <td><p id="networkPacketLost"></p></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="title">
+                                        <i class="fa-solid fa-wave-square"></i>
+                                        <p>Jitter</p>
+                                    </div>
+                                </td>
+                                <td><p id="networkJitter"></p></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="title">
+                                        <i class="fa-solid fa-clock-rotate-left"></i>
+                                        <p>RTT</p>
+                                    </div>
+                                </td>
+                                <td><p id="networkRtt"></p></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div id="tabStyling" class="tabcontent">
+                        <div class="title">
+                            <i class="fa-solid fa-palette"></i>
+                            <p>Theme</p>
+                        </div>
+                        <br />
+                        <select id="mirotalkTheme">
+                            <option value="dark">Dark</option>
+                            <option value="grey">Grey</option>
+                            <option value="green">Green</option>
+                            <option value="blue">Blue</option>
+                            <option value="red">Red</option>
+                            <option value="purple">Purple</option>
+                            <option value="orange">Orange</option>
+                            <option value="yellow">Yellow</option>
+                        </select>
+                        <div id="themeCardsGrid" class="theme-cards-grid">
+                            <div class="theme-card" data-theme="dark" data-index="0">
+                                <i class="fa-solid fa-moon"></i>
+                                <span>Dark</span>
+                            </div>
+                            <div class="theme-card" data-theme="grey" data-index="1">
+                                <i class="fa-solid fa-cloud"></i>
+                                <span>Grey</span>
+                            </div>
+                            <div class="theme-card" data-theme="green" data-index="2">
+                                <i class="fa-solid fa-leaf"></i>
+                                <span>Green</span>
+                            </div>
+                            <div class="theme-card" data-theme="blue" data-index="3">
+                                <i class="fa-solid fa-droplet"></i>
+                                <span>Blue</span>
+                            </div>
+                            <div class="theme-card" data-theme="red" data-index="4">
+                                <i class="fa-solid fa-fire"></i>
+                                <span>Red</span>
+                            </div>
+                            <div class="theme-card" data-theme="purple" data-index="5">
+                                <i class="fa-solid fa-gem"></i>
+                                <span>Purple</span>
+                            </div>
+                            <div class="theme-card" data-theme="orange" data-index="6">
+                                <i class="fa-solid fa-sun"></i>
+                                <span>Orange</span>
+                            </div>
+                            <div class="theme-card" data-theme="yellow" data-index="7">
+                                <i class="fa-solid fa-star"></i>
+                                <span>Yellow</span>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="title">
+                            <i class="fas fa-fill-drip"></i>
+                            <p>Custom theme</p>
+                        </div>
+                        <br />
+                        <input id="themeColorPicker" class="theme-color-picker" type="text" />
+                        <br />
+                        <div class="inline-check-box">
+                            <div>
+                                <div class="title">
+                                    <i class="fas fa-save"></i>
+                                    <p>Keep custom</p>
+                                </div>
+                            </div>
+                            <input id="keepCustomTheme" class="toggle" type="checkbox" />
+                        </div>
+                        <br />
+                        <div class="title">
+                            <i class="fa-solid fa-up-down-left-right"></i>
+                            <p>Buttons bar</p>
+                        </div>
+                        <br />
+                        <select id="mainButtonsBarPosition">
+                            <option value="vertical">Vertical</option>
+                            <option value="horizontal">Horizontal</option>
+                        </select>
+                        <br />
+                        <div id="pinUnpinGridDiv">
+                            <div class="title">
+                                <i class="fa-solid fa-map-pin"></i>
+                                <p>Pin video position</p>
+                            </div>
+                            <br />
+                            <select id="pinVideoPositionSelect">
+                                <option value="vertical">Vertical</option>
+                                <option value="horizontal">Horizontal</option>
+                                <option value="top">Top</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="tabLanguages" class="tabcontent">
+                        <div class="title">
+                            <i class="fa-solid fa-language"></i>
+                            <p>Language</p>
+                        </div>
+                        <br />
+                        <div id="google_translate_element"></div>
+                        <br />
+                    </div>
+                    <br />
+                </div>
+            </main>
+        </section>
+
+        <!-- End my settings -->
+
+        <!-- Start whiteboard -->
+
+        <section id="whiteboard" class="hidden">
+            <header id="whiteboardHeader" class="whiteboard-header">
+                <div id="whiteboardTitle" class="whiteboard-header-title">
+                    <button id="whiteboardLockBtn" class="fa-solid fa-lock-open"></button>
+                    <button id="whiteboardUnlockBtn" class="fa-solid fa-lock"></button>
+                </div>
+                <div id="whiteboardOptions" class="whiteboard-header-options">
+                    <button id="whiteboardGhostButton" class="fas fa-circle-half-stroke"></button>
+                    <button id="whiteboardGridBtn" class="fas fa-table-cells-large hidden"></button>
+                    <input id="wbBackgroundColorEl" class="whiteboardColorPicker" type="color" value="#000000" />
+                    <input id="wbDrawingColorEl" class="whiteboardColorPicker" type="color" value="#FFFFFF" />
+                    <button id="whiteboardPencilBtn" class="fas fa-pencil-alt"></button>
+                    <button id="whiteboardVanishingBtn" class="fas fa-highlighter"></button>
+                    <button id="whiteboardObjectBtn" class="fas fa-mouse-pointer"></button>
+                    <button id="whiteboardEraserBtn" class="fas fa-eraser"></button>
+                    <button id="whiteboardUndoBtn" class="fas fa-undo"></button>
+                    <button id="whiteboardRedoBtn" class="fas fa-redo"></button>
+                    <div class="whiteboard-dropdown">
+                        <button
+                            class="whiteboard-dropdown-toggle"
+                            type="button"
+                            id="whiteboardDropDownMenuBtn"
+                            data-bs-toggle="whiteboard-dropdown"
+                            aria-expanded="false"
+                        >
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div
+                            id="whiteboardDropdownMenu"
+                            class="whiteboard-dropdown-menu app-dropdown-menu"
+                            aria-labelledby="whiteboardDropDownMenu"
+                        >
+                            <button id="whiteboardImgFileBtn" class="app-dropdown-action">
+                                <i class="far fa-image"></i> Add image file
+                            </button>
+                            <button id="whiteboardImgUrlBtn" class="app-dropdown-action">
+                                <i class="fas fa-link"></i> Add image URL
+                            </button>
+                            <button id="whiteboardPdfFileBtn" class="app-dropdown-action">
+                                <i class="far fa-file-pdf"></i> Add pdf file
+                            </button>
+                            <button id="whiteboardTextBtn" class="app-dropdown-action">
+                                <i class="fas fa-spell-check"></i> Add text
+                            </button>
+                            <button id="whiteboardStickyNoteBtn" class="app-dropdown-action">
+                                <i class="fas fa-sticky-note"></i> Add sticky note
+                            </button>
+                            <button id="whiteboardLineBtn" class="app-dropdown-action">
+                                <i class="fas fa-slash"></i> Add line
+                            </button>
+                            <button id="whiteboardRectBtn" class="app-dropdown-action">
+                                <i class="far fa-square"></i> Add rectangle
+                            </button>
+                            <button id="whiteboardTriangleBtn" class="app-dropdown-action">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="1em"
+                                    height="1em"
+                                    viewBox="0 0 24 24"
+                                    fill="#FFFFFF"
+                                >
+                                    <path d="M12 5.887l8.468 14.113h-16.936l8.468-14.113zm0-3.887l-12 20h24l-12-20z" />
+                                </svg>
+                                Add triangle
+                            </button>
+                            <button id="whiteboardCircleBtn" class="app-dropdown-action">
+                                <i class="far fa-circle"></i> Add circle
+                            </button>
+                            <button id="whiteboardSaveBtn" class="app-dropdown-action">
+                                <i class="fas fa-save"></i> Save
+                            </button>
+                            <button id="whiteboardCleanBtn" class="app-dropdown-action">
+                                <i class="fas fa-trash"></i> Clean
+                            </button>
+                            <button id="whiteboardShortcutsBtn" class="app-dropdown-action">
+                                <i class="fas fa-keyboard"></i> Shortcuts
+                            </button>
+                        </div>
+                    </div>
+                    <button id="whiteboardCloseBtn" class="fas fa-times"></button>
+                </div>
+            </header>
+            <main>
+                <canvas id="wbCanvas"></canvas>
+                <div id="whiteboardShortcutsContent">
+                    <div class="wb-shortcuts-container">
+                        <h3 class="wb-shortcuts-title"><i class="fas fa-keyboard"></i> General Shortcuts</h3>
+                        <ul class="wb-shortcuts-list">
+                            <li><strong>Clone:</strong> <span class="wb-shortcut-key">⌘/Ctrl + C</span></li>
+                            <li><strong>Erase:</strong> <span class="wb-shortcut-key">⌘/Ctrl + X</span></li>
+                            <li><strong>Undo:</strong> <span class="wb-shortcut-key">⌘/Ctrl + Z</span></li>
+                            <li>
+                                <strong>Redo:</strong> <span class="wb-shortcut-key">⌘/Ctrl + Shift + Z</span> or
+                                <span class="wb-shortcut-key">⌘/Ctrl + Y</span>
+                            </li>
+                            <li>
+                                <strong>Delete/Remove:</strong> <span class="wb-shortcut-key">Delete</span> or
+                                <span class="wb-shortcut-key">Backspace</span>
+                            </li>
+                        </ul>
+
+                        <h3 class="wb-shortcuts-title"><i class="fas fa-pencil-alt"></i> Create Objects</h3>
+                        <div class="wb-shortcuts-subsection">
+                            <ul class="wb-shortcuts-list">
+                                <li><strong>Hold:</strong> <span class="wb-shortcut-key">Alt + Cmd (Mac)</span></li>
+                                <li>
+                                    <strong>Hold:</strong> <span class="wb-shortcut-key">Alt + Ctrl (Win/Linux)</span>
+                                </li>
+                            </ul>
+                            <h3 class="wb-shortcuts-title">Then press</h3>
+                            <ul class="wb-shortcuts-list">
+                                <li><span class="wb-shortcut-key">T</span> = Text</li>
+                                <li><span class="wb-shortcut-key">L</span> = Line</li>
+                                <li><span class="wb-shortcut-key">C</span> = Circle</li>
+                                <li><span class="wb-shortcut-key">R</span> = Rectangle</li>
+                                <li><span class="wb-shortcut-key">G</span> = Triangle</li>
+                                <li><span class="wb-shortcut-key">N</span> = Sticky Note</li>
+                                <li><span class="wb-shortcut-key">U</span> = Image URL</li>
+                                <li><span class="wb-shortcut-key">I</span> = Image</li>
+                                <li><span class="wb-shortcut-key">P</span> = PDF</li>
+                                <li><span class="wb-shortcut-key">V</span> = Vanishing Pen</li>
+                                <li><span class="wb-shortcut-key">Q</span> = Clear all</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </section>
+
+        <!-- End whiteboard -->
+
+        <!-- Start File Send -->
+
+        <div
+            id="sendFileDiv"
+            class="center fadein file-transfer-card file-transfer-card-send"
+            role="status"
+            aria-live="polite"
+        >
+            <div class="file-transfer-shell">
+                <div id="sendFileDragHandle" class="file-transfer-hero file-transfer-drag-handle">
+                    <div class="file-transfer-icon-wrap">
+                        <img
+                            id="imgShareSend"
+                            src="../images/share.png"
+                            alt="mirotalk-share-send"
+                            class="file-transfer-image"
+                        />
+                    </div>
+                    <div class="file-transfer-copy">
+                        <span class="file-transfer-kicker">Outgoing transfer</span>
+                        <h3 class="file-transfer-title">Sending file</h3>
+                        <p class="file-transfer-subtitle">Keep this window open while the transfer completes.</p>
+                    </div>
+                </div>
+                <div class="file-transfer-meta">
+                    <div id="sendFileInfo" class="file-transfer-info"></div>
+                    <div id="sendFilePercentage" class="file-transfer-percentage">Preparing transfer...</div>
+                </div>
+                <div class="file-transfer-progress-wrap">
+                    <progress id="sendProgress" max="0" value="0"></progress>
+                </div>
+                <div class="file-transfer-actions">
+                    <button id="sendAbortBtn" class="file-transfer-btn file-transfer-btn-danger">
+                        <i class="fas fa-stop-circle"></i>
+                        <span>Abort</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- End File Send -->
+
+        <!-- Start File Receive -->
+
+        <div
+            id="receiveFileDiv"
+            class="center fadein file-transfer-card file-transfer-card-receive"
+            role="status"
+            aria-live="polite"
+        >
+            <div class="file-transfer-shell">
+                <div id="receiveFileDragHandle" class="file-transfer-hero file-transfer-drag-handle">
+                    <div class="file-transfer-icon-wrap">
+                        <img
+                            id="imgShareReceive"
+                            src="../images/share.png"
+                            alt="mirotalk-share-receive"
+                            class="file-transfer-image"
+                        />
+                    </div>
+                    <div class="file-transfer-copy">
+                        <span class="file-transfer-kicker">Incoming transfer</span>
+                        <h3 class="file-transfer-title">Receiving file</h3>
+                        <p class="file-transfer-subtitle">You can hide this panel and let the download continue.</p>
+                    </div>
+                </div>
+                <div class="file-transfer-meta">
+                    <div id="receiveFileInfo" class="file-transfer-info"></div>
+                    <div id="receiveFilePercentage" class="file-transfer-percentage">Waiting for data...</div>
+                </div>
+                <div class="file-transfer-progress-wrap">
+                    <progress id="receiveProgress" max="0" value="0"></progress>
+                </div>
+                <div class="file-transfer-actions">
+                    <button id="receiveAbortBtn" class="file-transfer-btn file-transfer-btn-danger">
+                        <i class="fas fa-stop-circle"></i>
+                        <span>Abort</span>
+                    </button>
+                    <button id="receiveHideBtn" class="file-transfer-btn file-transfer-btn-secondary">
+                        <i class="fas fa-eye-slash"></i>
+                        <span>Hide</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stop File Receive -->
+
+        <!-- Start video URL iframe -->
+
+        <div id="videoUrlCont" class="center fadein">
+            <div id="videoUrlHeader">
+                <button id="videoUrlCloseBtn" class="fas fa-times"></button>
+            </div>
+            <br />
+            <iframe
+                id="videoUrlIframe"
+                title="Video Url Player"
+                src=""
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+            ></iframe>
+        </div>
+
+        <!-- End Youtube Iframe -->
+
+        <!-- Start Video - Audio player -->
+
+        <div id="videoAudioUrlCont" class="center fadein">
+            <div id="videoAudioUrlHeader">
+                <button id="videoAudioCloseBtn" class="fas fa-times"></button>
+            </div>
+            <br />
+            <video id="videoAudioUrlElement" src="" autoplay playsinline controls></video>
+        </div>
+
+        <!-- End Video - Audio player -->
+
+        <!-- Start Video container -->
+
+        <div id="videoPinMediaContainer"></div>
+        <div id="videoMediaContainer">
+            <!-- <div class="Camera">
+                <video></video>
+            </div> -->
+        </div>
+
+        <div id="audioMediaContainer">
+            <!-- <div>
+                <audio></audio>
+            </div>-->
+        </div>
+
+        <!-- End Video container -->
+
+        <!--
+        - JS scripts https://cdn.jsdelivr.net
+        
+        - ../vendor/webrtc-adapter/adapter.js                (https://github.com/webrtcHacks/adapter)
+        - https://github.com/leizongmin/js-xss                              (https://www.npmjs.com/package/xss)
+        - https://www.npmjs.com/package/marked                              (https://github.com/markedjs/marked)
+        - https://www.npmjs.com/package/sweetalert2                         (https://github.com/sweetalert2/sweetalert2)
+        - https://www.npmjs.com/package/fabric                              (https://github.com/fabricjs/fabric.js)
+        - https://www.npmjs.com/package/qrious                              (https://github.com/neocotic/qrious)
+        - ../vendor/emoji-mart/browser.js    (https://github.com/missive/emoji-mart)
+        - https://mozilla.github.io/pdf.js/                                 (https://github.com/mozilla/pdf.js)
+        - https://www.jsdelivr.com/package/npm/crypto-js                    (https://github.com/brix/crypto-js/)
+        - https://www.npmjs.com/package/tippy.js                            (https://github.com/atomiks/tippyjs) 
+        - https://flatpickr.js.org/                                         (https://github.com/flatpickr/flatpickr)
+        - https://simonwep.github.io/pickr/                                 (https://github.com/simonwep/pickr)
+        - https://uaparser.dev/                                             (https://github.com/faisalman/ua-parser-js)
+        - https://www.npmjs.com/package/axios                               (https://github.com/axios/axios)
+        - https://highlightjs.org/                                          (https://github.com/highlightjs/highlight.js)
+        -->
+        <script defer src="../vendor/webrtc-adapter/adapter.js"></script>
+        <script defer src="../vendor/xss/xss.min.js"></script>
+        <script defer src="../vendor/marked/marked.min.js"></script>
+        <script defer src="../vendor/sweetalert2/sweetalert2.all.min.js"></script>
+        <script defer src="../vendor/fabric/fabric.min.js"></script>
+        <script defer src="../vendor/qrious/qrious.min.js"></script>
+        <script defer src="../vendor/emoji-mart/browser.js"></script>
+        <script defer src="../vendor/pdfjs/pdf.min.js"></script>
+        <script defer src="../vendor/crypto-js/crypto-js.min.js"></script>
+        <script defer src="../vendor/popper/popper.min.js"></script>
+        <script defer src="../vendor/tippy/tippy-bundle.umd.min.js"></script>
+        <script defer src="../vendor/flatpickr/flatpickr.min.js"></script>
+        <script defer src="../vendor/pickr/pickr.min.js"></script>
+        <script defer src="../vendor/pickr/pickr.es5.min.js"></script>
+        <script defer src="../vendor/ua-parser-js/ua-parser.min.js"></script>
+        <script src="../vendor/axios/axios.min.js"></script>
+        <script defer src="../vendor/highlight/highlight.min.js"></script>
+        <script defer src="/socket.io/socket.io.js"></script>
+        <script defer src="../js/localStorage.js"></script>
+        <script defer src="../js/helpers.js"></script>
+        <script defer src="../js/common.js"></script>
+        <script defer src="../js/brand.js"></script>
+        <script defer src="../js/geoLocation.js"></script>
+        <script defer src="../js/detectSpeaking.js"></script>
+        <script defer src="../js/buttons.js"></script>
+        <script defer src="../js/videoGrid.js"></script>
+        <script defer src="../js/translate.js"></script>
+        <script defer src="../js/fixWebmDuration.js"></script>
+        <script defer src="../js/screenReader.js"></script>
+        <script defer src="../js/wakeLock.js"></script>
+        <script defer src="../js/client.js?v=meetazi-chat-real-fix-2"></script>
+        <script defer src="../js/networkStats.js"></script>
+        <script defer src="../js/speechRecognition.js"></script>
+        <script defer src="../js/nodeProcessor.js"></script>
+
+        <!-- end of Js scripts -->
+
+        <!-- 
+		the <video> and <audio> tags are all added and removed dynamically
+		in 'onAddStream', 'setupLocalMedia', and 'removePeer'/'disconnect'
+		-->
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

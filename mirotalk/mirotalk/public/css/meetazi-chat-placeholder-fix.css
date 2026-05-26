@@ -1,0 +1,16 @@
+﻿/* Hide chat placeholder when messages exist */
+
+#msgerEmptyNotice.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.msger-main:has(#msgerChat .msg) #msgerEmptyNotice,
+#msgerChat:has(.msg) ~ #msgerEmptyNotice {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
