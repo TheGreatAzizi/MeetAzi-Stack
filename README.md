@@ -1,98 +1,50 @@
 # MeetAzi Stack
 
-**MeetAzi Stack** is a customized self-hosted deployment stack based on **MiroTalk P2P**.
+**MeetAzi Stack** is a customized, Iran-friendly, self-hosted deployment stack based on [MiroTalk P2P](https://github.com/miroslavpejic85/mirotalk).
 
-This repository is built on top of the excellent open-source [MiroTalk](https://github.com/miroslavpejic85/mirotalk) project.  
-Huge thanks and shout-out to the original MiroTalk maintainers and contributors for building and maintaining a powerful WebRTC video conferencing platform.
+This project keeps the core idea and foundation of MiroTalk, but packages it as **MeetAzi** with practical fixes and deployment changes for real-world self-hosting, especially on Windows Server and servers where access to external CDNs or global services may be limited.
 
-> ❤️ Shout-out to MiroTalk and its contributors. This fork would not exist without their work.
+> ❤️ Big shout-out to the original MiroTalk project and its contributors. MeetAzi exists because of the excellent work done in MiroTalk.
 
-## فارسی
+## Persian Documentation
 
-نسخه فارسی این README در فایل زیر قرار دارد:
+نسخه فارسی این مستندات در فایل زیر قرار دارد:
 
-[مطالعه نسخه فارسی](README.fa.md)
-
----
-
-## About This Fork
-
-MeetAzi Stack is a customized fork/deployment stack of MiroTalk, prepared for a more independent, self-hosted, and production-friendly environment.
-
-The goal of this fork is to make the application easier to deploy on private servers, reduce dependency on external services, and address practical issues encountered during real-world usage.
-
-This version focuses on:
-
-- Running without dependency on external CDN resources as much as possible
-- Localizing required client-side assets
-- Fixing chat/message related issues
-- Improving the chat UI and message rendering behavior
-- Preparing the stack for Windows Server deployment
-- Including Coturn and Node TURN related configuration/templates
-- Keeping secrets and runtime-only files out of Git
+[README.fa.md](README.fa.md)
 
 ---
 
-## Main Improvements
+## What Is MeetAzi?
 
-### 1. No External CDN Dependency
+MeetAzi is a customized fork of MiroTalk focused on making browser-based video meetings easier to run on private infrastructure.
 
-This fork has been adjusted so the application can run without relying on external CDN resources as much as possible.
+It is designed for cases where you want:
 
-Required frontend assets and libraries have been localized into the project where applicable. This helps the application remain usable in restricted networks or environments where external CDNs are blocked, slow, unreliable, or unavailable.
+- A self-hosted WebRTC meeting system
+- A deployment that works better on Iran-based servers
+- Fewer runtime dependencies on external CDN resources
+- Localized frontend assets
+- A fixed and more stable chat/message experience
+- TURN/STUN support for more reliable connectivity
+- A Windows Server friendly setup
 
-Benefits:
-
-- More reliable self-hosted deployment
-- Better control over frontend assets
-- Reduced risk of third-party CDN outages
-- Better compatibility with restricted or private networks
-- Easier deployment on internal servers
-
----
-
-### 2. Chat and Message Bug Fixes
-
-This fork includes fixes and improvements around the chat and message experience.
-
-The customized version focuses on:
-
-- Fixing chat message sending/display issues
-- Improving chat UI behavior
-- Fixing placeholder and layout issues
-- Improving message rendering stability
-- Making the chat experience more reliable during meetings
+The project is structured as a full stack around the customized MiroTalk application, with TURN configuration and helper scripts included.
 
 ---
 
-### 3. Self-hosted Production Stack
-
-This repository is structured as a deployment stack and includes:
-
-- Customized MiroTalk application
-- Coturn configuration template
-- Node TURN helper service
-- Windows Server startup scripts
-- Safe configuration templates for environment-specific values
-
----
-
-### 4. Windows Server Friendly Setup
-
-This stack has been prepared for Windows Server style deployment, especially for setups running from paths such as:
-
-```text
-E:\apps
-```
-
-Startup scripts such as `start-meetazi.cmd` and `start-node-turn.cmd` are included to simplify service execution on Windows Server.
-
----
-
-## Project Structure
+## Repository Structure
 
 ```text
 MeetAzi-Stack/
+├── coturn/
+│   └── turnserver.template.conf
+│
+├── node-turn/
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── server.js
+│   └── start-node-turn.cmd
+│
 ├── mirotalk/
 │   └── mirotalk/
 │       ├── app/
@@ -104,15 +56,6 @@ MeetAzi-Stack/
 │       ├── package-lock.json
 │       └── start-meetazi.cmd
 │
-├── coturn/
-│   └── turnserver.template.conf
-│
-├── node-turn/
-│   ├── package.json
-│   ├── package-lock.json
-│   ├── server.js
-│   └── start-node-turn.cmd
-│
 ├── .gitignore
 ├── README.md
 └── README.fa.md
@@ -120,67 +63,151 @@ MeetAzi-Stack/
 
 ---
 
-## Components
+## Main Changes in This Fork
 
-### `mirotalk/mirotalk`
+### 1. Rebranded and Customized as MeetAzi
 
-This directory contains the customized MiroTalk application.
+The original MiroTalk application has been customized and prepared under the MeetAzi name.
 
-It includes the backend, frontend, public assets, views, CSS, JavaScript, APIs, tests, widgets, and related application files.
+This includes frontend/UI changes, custom styles, localized assets, and deployment scripts for running the app as a dedicated MeetAzi instance.
 
 ---
 
-### `coturn`
+### 2. CDN-independent Runtime
 
-This directory contains a template configuration for Coturn.
+One of the main goals of this fork is to make the application work without depending on external CDN resources as much as possible.
 
-> Important: The real `turnserver.conf` file should not be committed to Git because it may contain secrets, credentials, server IPs, domains, or certificate paths.
+This is especially useful for:
 
-Use the provided template as a safe starting point:
+- Iran-based servers
+- Restricted networks
+- Environments where external CDNs are slow, blocked, unstable, or unreliable
+- Private/self-hosted deployments that should not depend on third-party asset delivery
+
+Frontend assets and libraries have been localized where needed so the application can continue working even when external CDN access is limited.
+
+---
+
+### 3. Chat and Message Fixes
+
+This fork includes fixes and improvements around the MiroTalk chat/message experience.
+
+The customized version focuses on:
+
+- Fixing chat message sending issues
+- Fixing message display/rendering issues
+- Improving chat layout behavior
+- Fixing placeholder and text display problems
+- Making the in-meeting chat more stable and usable
+
+---
+
+### 4. Better Fit for Iran-based Servers
+
+MeetAzi was prepared with Iran-based server deployment in mind.
+
+The changes focus on reducing common deployment problems such as:
+
+- External CDN dependency
+- TURN/STUN connectivity issues
+- Network limitations affecting WebRTC behavior
+- Need for local assets
+- Need for a predictable Windows Server setup
+- Need for deployable config templates instead of hard-coded secrets
+
+---
+
+### 5. TURN Server Support
+
+The repository includes two TURN-related options:
+
+#### Option A: Coturn
+
+A Coturn template is available at:
 
 ```text
 coturn/turnserver.template.conf
 ```
 
----
+This template uses:
 
-### `node-turn`
+```text
+listening-port=3478
+listening-ip=0.0.0.0
+external-ip=CHANGE_ME
+realm=CHANGE_ME
+server-name=CHANGE_ME
+user=meetazi:CHANGE_ME
+min-port=49160
+max-port=49200
+```
 
-This directory contains the Node-based TURN helper service.
+Use this if you want to run a production-grade Coturn service.
 
-Main files:
+#### Option B: Node TURN
+
+A Node-based TURN helper exists at:
 
 ```text
 node-turn/server.js
-node-turn/package.json
+```
+
+The included startup file is:
+
+```text
 node-turn/start-node-turn.cmd
 ```
 
+This Node TURN setup listens on UDP port `3478` and uses a relay port range defined in `server.js`.
+
+> Important: Do not run Coturn and Node TURN on the same server/port at the same time unless you intentionally configure different ports. Both commonly use port `3478`.
+
 ---
 
-## Files That Should Not Be Committed
+### 6. Windows Server Startup Scripts
 
-For security and repository cleanliness, avoid committing:
+MeetAzi includes Windows `.cmd` startup scripts.
+
+The main app script is:
 
 ```text
-.env
-.env.*
-node_modules/
-*.log
-cert.pem
-key.pem
-*.pem
-*.key
-backup-*/
-turnserver.conf
+mirotalk/mirotalk/start-meetazi.cmd
 ```
 
-Safe template files may be committed:
+By default, it:
+
+- Changes directory to `E:\apps\mirotalk\mirotalk`
+- Sets `PORT=9907`
+- Creates `app/src/config.js` from `app/src/config.template.js` if missing
+- Starts the app with Node.js
+- Writes logs to `meetazi-autostart.log`
+
+The Node TURN startup script is:
 
 ```text
-.env.template
-turnserver.template.conf
-config.template.js
+node-turn/start-node-turn.cmd
+```
+
+It starts the Node TURN server and writes logs to `node-turn-autostart.log`.
+
+---
+
+## Requirements
+
+Install the following before running the stack:
+
+- Windows Server or Linux server
+- Node.js
+- npm
+- Git
+- A domain or subdomain pointing to your server
+- Open firewall ports for the app and TURN server
+- Optional but recommended: Coturn for production TURN service
+
+For Windows Server, the included scripts assume Node.js is installed at:
+
+```text
+C:\Program Files\nodejs\node.exe
 ```
 
 ---
@@ -196,105 +223,230 @@ cd MeetAzi-Stack
 
 ---
 
-### 2. Install MiroTalk Dependencies
+### 2. Install MeetAzi/MiroTalk Dependencies
 
 ```bash
 cd mirotalk/mirotalk
 npm install
 ```
 
----
-
-### 3. Configure Environment Variables
-
-Copy the environment template:
-
-```bash
-copy .env.template .env
-```
-
-On Linux/macOS:
-
-```bash
-cp .env.template .env
-```
-
-Then edit `.env` and configure your domain, ports, TURN/STUN settings, security options, and deployment-specific values.
-
----
-
-### 4. Configure Coturn
-
-Use the provided template:
-
-```text
-coturn/turnserver.template.conf
-```
-
-Copy it to your Coturn configuration path and update values such as:
-
-```text
-realm
-server-name
-listening-ip
-external-ip
-static-auth-secret
-cert
-pkey
-```
-
----
-
-### 5. Run the Application
-
-On Windows Server:
-
-```bash
-start-meetazi.cmd
-```
-
-Or run directly with Node:
+The application package includes the standard MiroTalk start script:
 
 ```bash
 npm start
 ```
 
+which runs:
+
+```bash
+node app/src/server.js
+```
+
 ---
 
-## Security Checklist
+### 3. Create Runtime Configuration
 
-Before pushing or publishing the repository, always check staged files:
+Copy the environment template:
+
+#### Windows
+
+```bash
+copy .env.template .env
+```
+
+#### Linux/macOS
+
+```bash
+cp .env.template .env
+```
+
+Then edit `.env` and configure your domain, ports, TURN/STUN settings, authentication options, and deployment-specific values.
+
+Also make sure `app/src/config.js` exists. The Windows startup script can create it automatically from:
+
+```text
+app/src/config.template.js
+```
+
+---
+
+## Running MeetAzi
+
+### Windows Server
+
+From the app directory:
+
+```bash
+cd mirotalk/mirotalk
+start-meetazi.cmd
+```
+
+By default, the script runs MeetAzi on:
+
+```text
+PORT=9907
+```
+
+So your reverse proxy or firewall should point to this port if you keep the default script unchanged.
+
+---
+
+### Direct Node Run
+
+```bash
+cd mirotalk/mirotalk
+npm start
+```
+
+or:
+
+```bash
+node app/src/server.js
+```
+
+---
+
+## TURN Setup
+
+WebRTC may require a TURN server when users are behind NAT, strict firewalls, mobile networks, or restricted networks. For Iran-based deployments, TURN is highly recommended.
+
+### Coturn Setup
+
+1. Copy the template:
+
+```bash
+copy coturn\turnserver.template.conf coturn\turnserver.conf
+```
+
+2. Edit these values:
+
+```text
+external-ip=YOUR_SERVER_PUBLIC_IP
+realm=turn.your-domain.com
+server-name=turn.your-domain.com
+user=meetazi:YOUR_STRONG_PASSWORD
+```
+
+3. Open the required ports:
+
+```text
+UDP 3478
+UDP 49160-49200
+```
+
+4. Configure your MeetAzi `.env` or app config to use the TURN server.
+
+---
+
+### Node TURN Setup
+
+1. Go to the Node TURN directory:
+
+```bash
+cd node-turn
+npm install
+```
+
+2. Edit `server.js`:
+
+```text
+externalIps
+credentials
+realm
+```
+
+3. Start it on Windows:
+
+```bash
+start-node-turn.cmd
+```
+
+4. Make sure the required UDP ports are open.
+
+> The Node TURN server included here is useful for simple/self-hosted deployments. For production-grade TURN service, Coturn is usually the stronger option.
+
+---
+
+## Recommended Firewall Ports
+
+Depending on your configuration:
+
+```text
+TCP 9907        MeetAzi app, if using the included Windows script
+TCP 80/443      Reverse proxy / HTTPS
+UDP 3478        TURN/STUN
+UDP 49160-49200 Coturn relay range from the included template
+UDP 49160-65000 Node TURN relay range from server.js, if using Node TURN
+```
+
+Use only the relay range that matches the TURN option you actually run.
+
+---
+
+## Deployment Notes for Iran-based Servers
+
+This fork was prepared to reduce common issues when deploying MiroTalk-like WebRTC apps on Iran-based servers.
+
+Recommended setup:
+
+- Serve MeetAzi behind HTTPS
+- Use a local TURN server
+- Avoid external CDN dependencies
+- Keep frontend assets local
+- Open UDP TURN ports correctly
+- Use a reverse proxy such as Nginx or IIS ARR if needed
+- Keep `.env`, certificates, and real TURN credentials private
+
+---
+
+## Security Notes
+
+Do not commit runtime secrets or generated files.
+
+The `.gitignore` is configured to avoid committing common sensitive or heavy files such as:
+
+```text
+.env
+.env.*
+node_modules/
+*.log
+cert.pem
+key.pem
+*.pem
+*.key
+*.crt
+turnserver.conf
+backup-*/
+```
+
+Template files are safe to keep in the repository:
+
+```text
+.env.template
+turnserver.template.conf
+config.template.js
+```
+
+Before pushing changes, check:
 
 ```bash
 git diff --cached --name-only
 ```
 
-Make sure none of these are included:
-
-```text
-.env
-.env.backup
-key.pem
-cert.pem
-turnserver.conf
-node_modules
-*.log
-backup-*
-```
+Make sure no secrets, logs, certificates, private keys, or backup folders are staged.
 
 ---
 
 ## Credits
 
-This project is based on [MiroTalk P2P](https://github.com/miroslavpejic85/mirotalk).
+MeetAzi Stack is based on [MiroTalk P2P](https://github.com/miroslavpejic85/mirotalk).
 
-MiroTalk is a self-hosted, open-source WebRTC video conferencing platform designed for real-time communication.  
-Special thanks to the original MiroTalk maintainers and contributors for their work.
+MiroTalk is an open-source WebRTC video conferencing project. This fork keeps credit to the original project and builds on top of it with deployment-focused customization, CDN-independent usage, chat/message fixes, TURN configuration, and Windows Server friendly scripts.
 
-MeetAzi Stack is a customized fork/deployment stack focused on self-hosting, local assets, CDN-independent usage, chat/message fixes, and production-oriented deployment.
+Special thanks to the original MiroTalk maintainers and contributors.
 
 ---
 
 ## License
 
-This project is based on MiroTalk. Please review the included `LICENSE` file and the official MiroTalk repository for license details.
+This project is based on MiroTalk. Please review the original MiroTalk license and the included license files before using, modifying, or redistributing this project.
