@@ -5,7 +5,7 @@ const server = new Turn({
   listeningIps: ['0.0.0.0'],
   relayIps: ['0.0.0.0'],
   externalIps: {
-    default: '5.42.217.134'
+    default: 'ur-ser-ip'
   },
   minPort: 49160,
   maxPort: 65000,
@@ -14,9 +14,9 @@ const server = new Turn({
   defaultAllocateLifetime: 3600,
   authMech: 'long-term',
   credentials: {
-    'meetazi': 'Aazizi123'
+    'meetazi': 'CHANGE-THIS'
   },
-  realm: 'turn.theazizi.ir',
+  realm: 'turn.YOURDOMAIN.XYZ',
   debugLevel: 'INFO'
 });
 
@@ -25,6 +25,6 @@ server.start();
 console.log('TURN server started');
 console.log('Listening on UDP 3478');
 console.log('Relay UDP range 49160-65000');
-console.log('Realm: turn.theazizi.ir');
+console.log('Realm: turn.YOURDOMAIN.XYZ');
 
 
