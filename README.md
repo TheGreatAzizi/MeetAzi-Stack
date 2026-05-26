@@ -449,4 +449,14 @@ Special thanks to the original MiroTalk maintainers and contributors.
 
 ## License
 
-This project is based on MiroTalk. Please review the original MiroTalk license and the included license files before using, modifying, or redistributing this project.
+This project is a fork/customized deployment stack based on MiroTalk, which is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.
+
+Because this project is based on AGPL-licensed software, the same license obligations may apply to this fork and to any modified versions distributed or offered as a network service.
+
+Please review:
+
+- The included `LICENSE` file
+- The original MiroTalk repository
+- The full AGPL-3.0 license text
+
+Original project: [MiroTalk](https://github.com/miroslavpejic85/mirotalk)
