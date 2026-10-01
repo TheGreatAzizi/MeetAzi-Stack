@@ -1,5 +1,6 @@
 # MeetAzi Stack
-
+[![DevSponsors](https://devsponsors.github.io/assets/badges/sponsor.svg)](https://devsponsors.github.io)
+[![DevSponsors](https://devsponsors.github.io/assets/badges/member.svg)](https://devsponsors.github.io)
 **MeetAzi Stack** is a customized, Iran-friendly, self-hosted deployment stack based on [MiroTalk P2P](https://github.com/miroslavpejic85/mirotalk).
 
 This project keeps the core idea and foundation of MiroTalk, but packages it as **MeetAzi** with practical fixes and deployment changes for real-world self-hosting, especially on Windows Server and servers where access to external CDNs or global services may be limited.
